@@ -1,4 +1,4 @@
-# Nothing Explorer capability audit — 0.5.0
+# Nothing Explorer capability audit — 0.6.0
 
 ## Delivered
 
@@ -15,13 +15,13 @@
 
 ## Verified
 
-Fourteen automated tests pass. Desktop smoke tests check actual click pairs, decoded preview/thumbnail dimensions, live Windows drive labels in three UI surfaces, file operations, undo, pins/session state and archive flows. Windows indexed search returned results on this PC. Native dialog exports and clipboard reader were checked. Final packaged smoke is required for every release.
+Twenty automated tests pass. Desktop smoke tests check actual click pairs, decoded preview/thumbnail dimensions, live Windows drive labels in three UI surfaces, file operations, undo, pins/session state and archive flows. Windows indexed search returned results on this PC. Native dialog exports and clipboard reader were checked. Final packaged smoke is required for every release.
 
 ## Boundaries and acceptance still outstanding
 
 - Full in-window Windows shell namespace and third-party context-menu extension hosting; shell-only tools use native Windows entry points.
 - Complete AQS grammar, indexed content queries, non-ZIP archive formats, and encrypted ZIPs.
-- Restart-resume for interrupted transfer jobs. Successful operation history persists; in-flight work does not resume automatically. Source data is retained until a completed move is recycled.
+- Byte-offset resume and complete crash reconciliation remain outstanding. Interrupted jobs can explicitly retry remaining sources, skipping recorded commits. Source data is retained until a completed move is recycled.
 - Hands-on cross-app drag/drop and clipboard, Properties/Open With UI, network mapping/permissions, device hotplug, cloud placeholders, assistive technology and extreme directory sizes.
 - Authenticode signing remains unconfigured. GitHub release updates are implemented; installed upgrade acceptance across machines remains.
 
@@ -35,3 +35,7 @@ Native keyboard/mouse routing, virtualized file rows, a shared 60 Hz app update 
 ## 0.5 expansion
 
 Appearance settings, creator credit, a fixed GitHub release feed, release CI, native shell tools, previewed bulk rename with grouped undo and transfer pause/resume are implemented. See PARITY.md for the complete capability matrix and remaining scope.
+
+## 0.6 parity milestone
+
+Original themed folder icon; persistent protected redo; interrupted-job retry; collision skip/keep-both; in-window shell namespace enumeration and recycle restoration; grouping, icon sizes, columns and compact rows. Test the previous packaged 0.5 build against the published 0.6 GitHub feed. Full parity remains the target, with PARITY.md distinguishing implemented capabilities from native bridges and unverified provider behavior.

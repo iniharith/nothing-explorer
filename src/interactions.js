@@ -20,7 +20,7 @@ document.addEventListener('keydown',e=>{
  if(cmd){consume(e);action(cmd);return;}
  if(key==='escape'){consume(e);document.querySelectorAll('.command-menu[open]').forEach(m=>m.open=false);if(e.target===$('#search'))$('#clear-search').click();else if(e.target===$('#address')){$('#address').value=tab().path;$('#address').blur();$('#address-form').classList.remove('editing');}else{selected.clear();syncSelection();}return;}
  if(isEditing)return;
- if(ctrl){cmd={c:e.shiftKey?'copy-path':'copy',x:'cut',v:'paste',z:'undo'}[key];if(key==='a'){consume(e);selected=new Set(visible().map(e=>e.path));syncSelection();return;}}
+ if(ctrl){cmd={c:e.shiftKey?'copy-path':'copy',x:'cut',v:'paste',z:e.shiftKey?'redo':'undo',y:'redo'}[key];if(key==='a'){consume(e);selected=new Set(visible().map(e=>e.path));syncSelection();return;}}
  else cmd={f2:'rename',delete:'trash',enter:'open',backspace:'back'}[key];
  if(cmd){consume(e);action(cmd);return;}
  const menu=e.target.closest?.('.command-menu[open]');if(menu&&['arrowdown','arrowup','home','end'].includes(key)){consume(e);const buttons=[...menu.querySelectorAll('button:not(:disabled)')],i=buttons.indexOf(e.target);buttons[key==='home'?0:key==='end'?buttons.length-1:(i+(key==='arrowdown'?1:buttons.length-1))%buttons.length]?.focus();return;}

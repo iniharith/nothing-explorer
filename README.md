@@ -1,4 +1,4 @@
-# Nothing Explorer 0.5
+# Nothing Explorer 0.6
 
 Windows desktop file manager with Explorer-style tabs, address/search and command rows, and the supplied admin reference's frosted-glass treatment.
 
@@ -13,7 +13,7 @@ npm run installer
 ```
 
 Portable folder: `release/win-unpacked/` (keep the entire folder together).
-Installer: `release/Nothing-Explorer-Setup-0.5.0.exe`.
+Installer: `release/Nothing-Explorer-Setup-0.6.0.exe`.
 
 ## Implemented
 
@@ -25,7 +25,7 @@ Installer: `release/Nothing-Explorer-Setup-0.5.0.exe`.
 - Persistent undo for successful app transfers, creations and renames (latest 100 records). Hashes protect copied targets from being discarded if their contents changed. Undo refuses collisions. A move copies/verifies the destination then sends its source to the Windows Recycle Bin, so a failed recycle can leave a safe duplicate.
 - ZIP entry browsing, creation, and extraction into a new folder. Extraction rejects path traversal, reserved Windows names, symlinks, duplicate case-insensitive paths and encrypted entries, and verifies CRC checksums.
 - Current-folder filtering, cancellable subfolder scanning, optional Windows indexed name search. Scanning supports quoted names, wildcards, `ext:png`, `kind:picture`, `size:>10MB`, `modified:2026-10-23`, `created:>=2026-01-01`, and `content:"some text"`. Content scanning reads text files up to 2 MB; scan/index results are capped at 5,000. The optional indexed mode covers indexed locations and names, not all filesystem contents or the complete AQS grammar.
-- In-app metadata, Windows native Properties and Open With, and native Windows Network/Recycle Bin entry points. Recover deleted files from Windows Recycle Bin.
+- In-app metadata, Windows native Properties and Open With, and in-window Windows Network/Recycle Bin listings. Restore deleted items through the Windows shell from the in-app Recycle Bin.
 - Dark/light themes, persisted wallpaper/view, neutral field focus, shared menu styling, search clear, reduced-motion/high-contrast styles.
 
 ## Keyboard
@@ -40,7 +40,7 @@ Ctrl+T new tab; Ctrl+W close tab; Ctrl+Tab / Ctrl+Shift+Tab cycle tabs; Ctrl+L a
 
 The Windows Search provider was queried live, native dialog exports were checked, and the Windows clipboard reader was checked. Cross-app clipboard/drag-and-drop, interactive native dialog acceptance, assistive technology, cloud placeholders, network permissions and very large directory workloads still require hands-on acceptance. Builds are unsigned. Installed builds detect stable releases from iniharith/nothing-explorer on GitHub. Settings offers download and restart/install controls; no alternate update URL is accepted.
 
-This app does not implement Explorer's entire shell namespace/third-party shell-extension host inside its own window. Windows-only shell operations use native Windows entry points or Show in Windows Explorer. ZIP is the built-in archive format; use Open With for others. Transfer jobs do not resume after a crash; staged copies may remain, while originals are retained until commit and recycle. The app does not register itself as the Windows shell.
+This app does not implement Explorer's entire shell namespace/third-party shell-extension host inside its own window. Windows-only shell operations use native Windows entry points or Show in Windows Explorer. ZIP is the built-in archive format; use Open With for others. Interrupted transfer jobs can retry their remaining sources after a restart. Partial files restart from zero; a commit/journal gap can still require manual reconciliation. Originals are retained until commit and recycle. The app does not register itself as the Windows shell.
 
 ## Design
 
@@ -68,3 +68,13 @@ Install the NSIS setup from [GitHub Releases](https://github.com/iniharith/nothi
 The app checks the fixed public GitHub repository 15 seconds after startup and every six hours. It accepts stable newer releases only, does not downgrade, and requires an explicit download and restart. The sidebar Settings button marks available updates. Update downloads are verified by electron-updater against release checksums. Unsigned builds do not provide Authenticode publisher verification.
 
 To release: change the package/lock version together, commit, create the matching `vX.Y.Z` tag and push it. The Windows GitHub Actions workflow runs tests, builds the NSIS installer and updater metadata, runs packaged smoke, then publishes the installer, blockmap and latest.yml. Never publish latest.yml without its matching installer. The updater follows the compiled repository only, following the [electron-builder update workflow](https://www.electron.build/docs/features/auto-update/).
+
+## Version 0.6 — parity expansion
+
+- Original gold/charcoal frosted folder icon, with dotted N branding and SVG/PNG/ICO sources.
+- This PC, Recycle Bin, Libraries, Network and Printers browse in the existing app window through Windows shell identities. Recycle Bin items expose restore and permanent-delete commands. Windows actions lists verbs exposed by installed shell handlers. This is not full IContextMenu2/3 hosting.
+- Persistent redo (Ctrl+Y / Ctrl+Shift+Z), including group rename. Recovery copies stay in the app profile and later edits/collisions stop undo or redo.
+- Persisted interrupted transfer jobs offer Retry remaining. Existing recorded commits are retained. Native collision prompts offer Cancel, Skip existing and Keep both with numbered names; replacement and directory merging remain outstanding.
+- Group by type/name/month/size, configurable detail columns, compact rows, file-extension visibility and four icon sizes, retaining a bounded virtual viewport.
+
+`npm run icon` regenerates the PNG from the editable SVG. The ICO includes 16–256 px entries. See PARITY.md for the remaining implementation and acceptance gaps.

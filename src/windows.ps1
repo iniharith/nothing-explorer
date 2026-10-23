@@ -12,6 +12,35 @@ if($Operation -eq 'broker'){
 $payloadJson=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($PayloadBase64))
 $payload=$payloadJson | ConvertFrom-Json
 switch($Operation){
+ 'shellList' {
+  $shell=New-Object -ComObject Shell.Application;$folder=$shell.Namespace([string]$payload.path)
+  if(-not $folder){throw 'Windows could not open this shell location.'}
+  $items=@();$count=0
+  foreach($item in $folder.Items()){
+   if($count -ge 10000){break};$count++
+   $raw=[string]$item.Path;$fileSystem=[bool]$item.IsFileSystem
+   if($item.IsFolder -and $fileSystem -and -not [IO.Directory]::Exists($raw)){$fileSystem=$false}
+   $modified=0;try{$modified=([DateTimeOffset][DateTime]$item.ModifyDate).ToUnixTimeMilliseconds()}catch{}
+   $displayName=[string]$item.Name;$extension=[IO.Path]::GetExtension($raw);if($fileSystem -and -not $item.IsFolder -and $extension -and -not $displayName.EndsWith($extension,[StringComparison]::OrdinalIgnoreCase)){$displayName+=$extension}
+   $items+=@{name=$displayName;parsing=$raw;directory=[bool]$item.IsFolder;filesystem=$fileSystem;size=[double]$item.Size;modified=$modified;extension=[IO.Path]::GetExtension($raw).TrimStart('.').ToLowerInvariant();type=[string]$item.Type;originalLocation=[string]$item.ExtendedProperty('System.Recycle.DeletedFrom');deleted=[string]$item.ExtendedProperty('System.Recycle.DateDeleted')}
+  }
+  $parent='';$parentName='';try{$parent=[string]$folder.ParentFolder.Self.Path;$parentName=[string]$folder.ParentFolder.Self.Name}catch{}
+  @{name=[string]$folder.Self.Name;parent=$parent;parentName=$parentName;entries=$items;truncated=($folder.Items().Count -gt 10000)}|ConvertTo-Json -Compress -Depth 8;break
+ }
+ 'shellInvoke' {
+  $shell=New-Object -ComObject Shell.Application;$folder=$shell.Namespace([string]$payload.parent)
+  if(-not $folder){$folder=$shell.Namespace([string]$payload.path);if($folder){$item=$folder.Self}}else{$item=$null;foreach($candidate in $folder.Items()){if([string]$candidate.Path -eq [string]$payload.path){$item=$candidate;break}}}
+  if(-not $item){throw 'The Windows item is no longer available.'}
+  switch([string]$payload.verb){'open' {$item.InvokeVerb();break};'properties' {$item.InvokeVerb('properties');break};'undelete' {$item.InvokeVerb('undelete');break};'delete' {$item.InvokeVerb('delete');break};default {throw 'Unsupported shell verb.'}}
+  'true';break
+ }
+ 'shellVerbs' {
+  $shell=New-Object -ComObject Shell.Application;$folder=$shell.Namespace([string]$payload.parent);if(-not $folder){throw 'Shell parent is unavailable.'}
+  $item=$null;foreach($candidate in $folder.Items()){if([string]$candidate.Path -eq [string]$payload.path){$item=$candidate;break}}
+  if(-not $item){throw 'The item is no longer in this location.'}
+  $verbs=@();$index=0;foreach($verb in $item.Verbs()){$verbs+=@{index=$index;name=[string]$verb.Name};$index++}
+  if($payload.invoke -eq $true){$list=$item.Verbs();$index=[int]$payload.index;if($index -lt 0 -or $index -ge $list.Count){throw 'Shell action is no longer available.'};$verb=$list.Item($index);if([string]$verb.Name -ne [string]$payload.name){throw 'Shell action changed. Open the menu again.'};$verb.DoIt();'true'}else{ConvertTo-Json -InputObject $verbs -Compress};break
+ }
  'systemCommand' {
   $target=[string]$payload.path
   $shell=New-Object -ComObject Shell.Application

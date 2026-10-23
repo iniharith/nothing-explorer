@@ -17,3 +17,12 @@ body[data-glass=false] .workspace main,body[data-glass=false] .workspace .sideba
 #bulk-rename-dialog{width:690px;max-width:90vw;color:var(--text);background:var(--solid);border:1px solid var(--border);border-radius:12px;padding:26px}#bulk-rename-dialog h2{margin-top:0}#bulk-rename-dialog p{color:var(--muted)}#bulk-name{border:1px solid var(--border);padding:10px;margin:10px;min-width:240px}#bulk-preview{max-height:340px;overflow:auto;margin:16px 0}.bulk-row{display:grid;grid-template-columns:1fr 20px 1fr;gap:12px;padding:10px;border-bottom:1px solid var(--border);overflow-wrap:anywhere}.bulk-row strong{font-weight:500}
 
 body[data-glass=false] .explorer-commands{backdrop-filter:none}
+
+.settings-brand{width:90px;height:90px;object-fit:contain;margin:-10px 0 12px}.shell-locations{border-top:1px solid var(--border);margin-top:12px;padding-top:10px}.sidebar .shell-locations button{height:32px}
+.virtual-list .entry,.virtual-list .columns{grid-template-columns:var(--detail-columns,minmax(200px,1fr) 147px 105px 80px)}
+.columns>button{padding:0;text-align:left;font-size:11px;color:var(--muted);height:100%;overflow:hidden;text-overflow:ellipsis}.columns>button:hover{color:var(--text);background:transparent}
+.file-group-heading{position:absolute;left:24px;right:24px;height:30px;display:flex;align-items:center;color:var(--muted);font-size:12px;border-bottom:1px solid var(--border);pointer-events:none}
+.grid .entry{grid-template-columns:1fr}.grid[data-density=small] .file-art{width:64px;height:48px}.grid[data-density=large] .file-art{width:136px;height:122px}.grid[data-density=extra] .file-art{width:196px;height:180px}.grid[data-density=large] .file-art svg{width:72px;height:72px}.grid[data-density=extra] .file-art svg{width:110px;height:110px}.grid .filename{width:100%}
+.command-popover{max-height:min(72vh,640px);overflow-y:auto}.command-popover [role=menuitemcheckbox][aria-checked=true]::before{content:'✓';color:var(--accent);margin-right:6px}.sidebar{overflow:auto}.sidebar-bottom{flex-shrink:0}
+
+#columns-dialog{width:380px;padding:25px;background:var(--solid);color:var(--text);border:1px solid var(--border);border-radius:12px}#columns-dialog h2{margin-top:0}
