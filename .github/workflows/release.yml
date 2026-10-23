@@ -29,7 +29,10 @@ jobs:
       - name: Packaged smoke
         shell: pwsh
         run: |
-          $app = Start-Process -FilePath '.\release\win-unpacked\Nothing Explorer.exe' -ArgumentList '--smoke','--capture','--interaction-test' -WindowStyle Hidden -Wait -PassThru
+          New-Item -ItemType Directory -Path artifacts -Force | Out-Null
+          $app = Start-Process -FilePath '.\release\win-unpacked\Nothing Explorer.exe' -ArgumentList '--smoke','--capture','--interaction-test' -WindowStyle Hidden -Wait -PassThru -RedirectStandardOutput artifacts/ci-smoke.log -RedirectStandardError artifacts/ci-smoke-error.log
+          Get-Content artifacts/ci-smoke.log
+          Get-Content artifacts/ci-smoke-error.log
           if ($app.ExitCode -ne 0) { throw "Smoke exited $($app.ExitCode)" }
       - name: Publish validated stable release
         if: startsWith(github.ref, 'refs/tags/')
@@ -41,10 +44,11 @@ jobs:
           gh release upload $env:GITHUB_REF_NAME 'release/*.exe' 'release/*.blockmap' 'release/latest.yml' --clobber
           gh release edit $env:GITHUB_REF_NAME --draft=false --latest
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: windows-release
           path: |
             release/*.exe
             release/*.blockmap
             release/latest.yml
-            artifacts/*performance*.json
+            artifacts/**
