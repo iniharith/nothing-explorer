@@ -1,4 +1,4 @@
-# Explorer capability audit — 0.6.1
+# Explorer capability audit — 0.6.2
 
 This is a working file manager, not a complete reimplementation of Windows Explorer. “Native” below means the command opens a Windows interface; it does not run inside this app.
 

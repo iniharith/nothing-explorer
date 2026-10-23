@@ -12,6 +12,7 @@ module.exports=async function smoke(win,openRequests){
   win.webContents.sendInputEvent({type:'mouseDown',...rect,button:'left',clickCount:2});win.webContents.sendInputEvent({type:'mouseUp',...rect,button:'left',clickCount:2});
  }
  try{
+  await fs.mkdir(path.join(process.cwd(),'artifacts'),{recursive:true});
   await until('Boolean(tab()) && entries.length>0','Initial folder did not load');
   assert(await js(`driveLocations.length>0 && driveLocations.every(d=>/^[A-Z]:\\\\$/i.test(d.path))`),'Windows helper returned invalid drive data');
   const labelled=await js(`driveLocations.find(d=>d.label&&d.total>0)`);

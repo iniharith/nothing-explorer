@@ -1,4 +1,4 @@
-# Nothing Explorer capability audit — 0.6.1
+# Nothing Explorer capability audit — 0.6.2
 
 ## Delivered
 
