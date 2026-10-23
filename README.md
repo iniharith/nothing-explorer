@@ -13,7 +13,7 @@ npm run installer
 ```
 
 Portable folder: `release/win-unpacked/` (keep the entire folder together).
-Installer: `release/Nothing-Explorer-Setup-0.6.0.exe`.
+Installer: `release/Nothing-Explorer-Setup-0.6.1.exe`.
 
 ## Implemented
 

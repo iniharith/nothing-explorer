@@ -1,6 +1,6 @@
 {
   "name": "nothing-explorer",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "A frosted glass file manager for Windows",
   "main": "src/main.cjs",
   "scripts": {
