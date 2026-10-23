@@ -1,0 +1,38 @@
+/* Stable geometry and brief, restrained state changes. No perpetual animations. */
+.virtual-list{isolation:isolate;contain:layout paint;overscroll-behavior:contain;scroll-behavior:auto}
+.workspace{position:relative;isolation:isolate;overflow:hidden}
+.workspace::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background-image:var(--glass-wallpaper,var(--wallpaper,url('../assets/backdrop.svg')));background-size:100vw 100vh;background-position:center bottom;transform:translateZ(0);backdrop-filter:none}
+.workspace main,.workspace .sidebar{backdrop-filter:none}
+.virtual-list{transform:translateZ(0)}
+.virtual-list #files,.virtual-list.grid #files{display:block;position:relative;padding:0;min-height:0;outline:none}
+.virtual-list .entry,.virtual-list.grid .entry{position:absolute;margin:0;height:41px;box-sizing:border-box}
+.virtual-list.grid .entry{height:138px}
+.virtual-list .columns{backdrop-filter:none;background:rgba(23,24,23,.97)}
+.light .virtual-list .columns{background:rgba(244,247,244,.97)}
+.virtual-list .file-art{overflow:hidden}
+button,.command-menu summary{transition:background-color 120ms steps(7,end),border-color 120ms steps(7,end),color 120ms steps(7,end),transform 100ms steps(6,end);touch-action:manipulation}
+button:active:not(:disabled){transform:translateY(1px) scale(.98)}
+.nav-buttons button{height:34px;border-radius:7px;color:var(--text)}
+.nav-buttons svg{width:17px;height:17px}
+.nav-buttons button:hover:not(:disabled),.icon-command:hover:not(:disabled){background:var(--hover);border-color:var(--border)}
+.explorer-commands button,.command-menu summary{font-weight:450;letter-spacing:.05px}
+.entry{transition:background-color 90ms steps(5,end),border-color 90ms steps(5,end)}
+.entry.keyboard-focus{outline:1px solid color-mix(in srgb,var(--accent) 65%,var(--text));outline-offset:-2px}
+.is-scrolling .entry{transition:none}
+.is-scrolling .entry:hover:not(.selected){background:transparent}
+.command-popover{padding:5px;border-radius:9px;border-color:color-mix(in srgb,var(--text) 13%,transparent);box-shadow:0 8px 24px #0005;transform-origin:top left}
+.command-menu[open] .command-popover{animation:menu-appear 120ms steps(7,end) both}
+.command-popover button{min-height:33px;border-radius:5px}
+.command-popover hr{border:0;border-top:1px solid var(--border);width:100%;margin:4px 0}
+.tab.active{box-shadow:inset 0 1px rgba(255,255,255,.04)}
+.tab-close{border-radius:5px;height:26px;align-self:center}
+.tab-close:hover{background:rgba(255,255,255,.11)}
+.search,#address-form{transition:border-color 120ms steps(7,end),background-color 120ms steps(7,end)}
+.search:hover,#address-form:hover{border-color:var(--border)}
+.sidebar{overscroll-behavior:contain}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--muted) 45%,transparent);border:3px solid transparent;background-clip:padding-box;border-radius:10px}
+::-webkit-scrollbar-thumb:hover{background-color:var(--muted)}
+@keyframes menu-appear{from{opacity:0;transform:translateY(-3px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){button,.entry,.command-menu summary,.search,#address-form{transition:none!important}.command-menu[open] .command-popover{animation:none!important}}

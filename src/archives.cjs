@@ -1,0 +1,18 @@
+const fs=require('node:fs/promises'),nativeFs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
+const {pipeline}=require('node:stream/promises');
+const {Transform}=require('node:stream'),{crc32}=require('node:zlib');
+const yauzl=require('yauzl'),yazl=require('yazl');
+const {vacant,nameCheck}=require('./files.cjs');
+function safeName(name){if(name.startsWith('/')||name.includes('\\'))throw Error('Unsafe archive path.');const parts=name.replace(/\/$/,'').split('/');for(const p of parts)nameCheck(p);return parts;}
+async function list(p){const zip=await yauzl.openPromise(p);const entries=[];let total=0;try{for await(const entry of zip.eachEntry()){safeName(entry.fileName);total+=entry.uncompressedSize;entries.push({name:entry.fileName,size:entry.uncompressedSize,directory:entry.fileName.endsWith('/')});if(entries.length>=20000)return {entries,total,truncated:true};}return {entries,total,truncated:false};}finally{zip.close();}}
+async function extract(source,target){await vacant(target);const stage=path.join(path.dirname(target),'.nothing-unzip-'+crypto.randomUUID());await fs.mkdir(stage);let zip;const names=new Set();try{zip=await yauzl.openPromise(source);for await(const entry of zip.eachEntry()){
+ const parts=safeName(entry.fileName),key=parts.join('/').toLowerCase();if(names.has(key))throw Error('Archive contains duplicate Windows paths.');names.add(key);
+ if((entry.externalFileAttributes>>>16&0xf000)===0xa000)throw Error('Archive symlinks are not supported.');if(entry.generalPurposeBitFlag&1)throw Error('Encrypted ZIP files must be opened with a compatible archive tool.');
+ const out=path.join(stage,...parts);if(entry.fileName.endsWith('/'))await fs.mkdir(out,{recursive:true});else{await fs.mkdir(path.dirname(out),{recursive:true});let crc=0;const check=new Transform({transform(chunk,encoding,callback){crc=crc32(chunk,crc);callback(null,chunk);}});await pipeline(await zip.openReadStreamPromise(entry),check,nativeFs.createWriteStream(out,{flags:'wx'}));if(crc!==entry.crc32)throw Error('ZIP checksum failed: '+entry.fileName);}
+ }await vacant(target);await fs.rename(stage,target);return target;}finally{zip?.close();await fs.rm(stage,{recursive:true,force:true}).catch(()=>{});}}
+async function create(sources,target){await vacant(target);const entries=[],names=new Set();async function walk(p,name){safeName(name);const s=await fs.lstat(p);if(s.isSymbolicLink())throw Error('Select the real folder or file instead of a symbolic link.');const key=name.toLowerCase();if(names.has(key))throw Error('Selected items contain duplicate archive names.');names.add(key);if(s.isDirectory()){entries.push({p,name:name+'/',dir:true});for(const n of await fs.readdir(p))await walk(path.join(p,n),name+'/'+n);}else entries.push({p,name});}
+ for(const p of sources){const relative=path.relative(p,target);if(relative===''||(!relative.startsWith('..'+path.sep)&&relative!=='..'&&!path.isAbsolute(relative)))throw Error('Save the ZIP outside the selected folder.');await walk(p,path.basename(p));}
+ const stage=path.join(path.dirname(target),'.nothing-zip-'+crypto.randomUUID());const zip=new yazl.ZipFile();let zipError;zip.on('error',e=>{zipError=e;zip.outputStream.destroy(e);});const writing=pipeline(zip.outputStream,nativeFs.createWriteStream(stage,{flags:'wx'}));
+ try{for(const e of entries){if(e.dir)zip.addEmptyDirectory(e.name);else zip.addFile(e.p,e.name);}zip.end();await writing;if(zipError)throw zipError;await vacant(target);await fs.copyFile(stage,target,nativeFs.constants.COPYFILE_EXCL);return target;}catch(e){zip.outputStream.destroy();await writing.catch(()=>{});throw e;}finally{await fs.rm(stage,{force:true}).catch(()=>{});}
+}
+module.exports={safeName,list,extract,create};

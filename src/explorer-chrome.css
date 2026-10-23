@@ -1,0 +1,42 @@
+/* Windows Explorer hierarchy: tab/title row, navigation, command bar. */
+body,body.light{padding:0;display:flex;flex-direction:column}
+.tabs{height:40px;min-height:40px;padding:5px 150px 0 8px;align-items:stretch;border:0;background:rgba(17,17,17,.8);-webkit-app-region:drag;overflow:hidden;gap:4px}
+.tabs button,.tab{-webkit-app-region:no-drag}
+.tab{width:240px;max-width:240px;min-width:90px;height:35px;border-radius:8px 8px 0 0;padding:0 8px;background:transparent;flex-shrink:1}
+.tab.active{background:rgba(255,255,255,.075);border:0}
+.tab .tab-title{display:flex;align-items:center;padding:5px 8px;font-size:12px}
+.tab-close{font-size:18px;line-height:20px}
+.tabs>[data-action="new-tab"]{align-self:center;height:29px;padding:2px 10px}
+.navigation{height:54px;min-height:54px;padding:9px 12px;gap:10px;border-radius:0;border:0;border-bottom:1px solid var(--border);background:rgba(15,15,15,.64)}
+.nav-buttons{width:176px;flex-shrink:0;justify-content:space-between}
+.nav-buttons button{width:36px;font-size:20px;padding:1px}
+#address-form,.search{height:35px;border-radius:5px;background:rgba(255,255,255,.045);border-color:rgba(255,255,255,.045)}
+.search{width:260px;flex-shrink:0}
+.explorer-commands{height:49px;min-height:49px;flex-shrink:0;padding:5px 15px;gap:6px;background:rgba(16,16,16,.64);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);position:relative;z-index:5}
+.explorer-commands button{height:33px;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:12px;border-radius:5px;padding:5px 10px}
+.explorer-commands .icon-command{width:35px;padding:7px}
+.explorer-commands svg{width:17px;height:17px}
+.explorer-commands .separator{margin:0 5px;height:21px}
+.sort-command{display:flex;align-items:center;gap:4px;padding-left:9px}
+.sort-command select{background:transparent;font-size:12px;max-width:135px;height:32px;padding-right:0}
+.sort-command select option{background:var(--solid)}
+.command-menu{position:relative;font-size:12px}
+.command-menu summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:7px;padding:7px 10px;height:33px;border-radius:5px}
+.command-menu summary:after{content:'⌄';margin-left:5px;color:var(--muted)}
+.command-menu summary:hover,.command-menu[open] summary{background:var(--hover)}
+.command-menu summary::-webkit-details-marker{display:none}
+.command-popover{position:absolute;top:38px;left:0;min-width:165px;padding:5px;border:1px solid var(--border);border-radius:9px;background:var(--solid);box-shadow:0 8px 24px #0006;display:flex;flex-direction:column;gap:2px}
+.command-popover button{width:100%;justify-content:flex-start}
+.command-popover.view-switch{margin:0}
+.command-popover.view-switch button{font-size:12px;padding:7px 10px}
+.command-icon{display:inline-flex;align-items:center}
+.workspace{flex:1;min-height:0;height:auto;margin:0;gap:0}
+.sidebar{border:0;border-right:1px solid var(--border);border-radius:0;width:214px;padding-top:21px;box-shadow:none;background:rgba(9,9,9,.64)}
+main{border:0;border-radius:0;box-shadow:none;background:rgba(12,12,12,.58)}
+.folder-heading[hidden]{display:none}
+#details{margin:0;border:0;border-left:1px solid var(--border);border-radius:0;background:rgba(8,8,8,.24)}
+.local-label{display:none}
+.columns{background:rgba(25,25,25,.54)}
+.light .explorer-commands{background:rgba(245,248,245,.76)}
+.light .tab.active{background:rgba(255,255,255,.6)}
+@media(max-width:1120px){.tabs{padding-left:8px}.sidebar{width:190px}.navigation{gap:8px}.nav-buttons{width:164px}.search{width:210px}.explorer-commands{padding-inline:10px}}

@@ -1,0 +1,64 @@
+{
+  "name": "nothing-explorer",
+  "version": "0.5.0",
+  "description": "A frosted glass file manager for Windows",
+  "main": "src/main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test test/*.test.cjs",
+    "package": "electron-builder --win dir",
+    "installer": "electron-builder --win nsis",
+    "release": "electron-builder --win nsis --publish always"
+  },
+  "devDependencies": {
+    "electron": "44.8.0",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "co.kampungcetak.nothingexplorer",
+    "productName": "Nothing Explorer",
+    "files": [
+      "src/**/*",
+      "package.json",
+      "assets/**/*"
+    ],
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "icon": "assets/icon.ico"
+    },
+    "asarUnpack": [
+      "src/windows.ps1"
+    ],
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Nothing Explorer",
+      "artifactName": "Nothing-Explorer-Setup-${version}.${ext}"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "iniharith",
+        "repo": "nothing-explorer",
+        "releaseType": "release"
+      }
+    ]
+  },
+  "dependencies": {
+    "electron-updater": "^6.8.9",
+    "yauzl": "^3.4.0",
+    "yazl": "^3.3.1"
+  },
+  "author": {
+    "name": "INIHARITH",
+    "url": "https://iniharith.github.io/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iniharith/nothing-explorer.git"
+  }
+}
