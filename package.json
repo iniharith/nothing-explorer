@@ -1,6 +1,6 @@
 {
   "name": "nothing-explorer",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "A frosted glass file manager for Windows",
   "main": "src/main.cjs",
   "scripts": {
@@ -40,7 +40,8 @@
       "src/shell-host.ps1",
       "src/shell-host.cs",
       "src/file-metadata.cs",
-      "vendor/7zip/**/*"
+      "vendor/7zip/**/*",
+      "src/property-sheet.cs"
     ],
     "nsis": {
       "oneClick": false,
@@ -61,7 +62,10 @@
     "copyright": "Copyright © 2026 INIHARITH"
   },
   "dependencies": {
+    "@imagemagick/magick-wasm": "0.0.45",
     "electron-updater": "^6.8.9",
+    "heic-decode": "2.1.0",
+    "sharp": "0.35.5",
     "yauzl": "^3.4.0",
     "yazl": "^3.3.1"
   },

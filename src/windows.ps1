@@ -130,8 +130,10 @@ switch($Operation){
   'true';break
  }
  'nativeProperties' {
-  Add-Type -TypeDefinition 'using System;using System.Runtime.InteropServices;public class ShellProperties{[DllImport("shell32.dll",CharSet=CharSet.Unicode)]public static extern bool SHObjectProperties(IntPtr hwnd,uint flags,string path,string page);}'
-  [void][ShellProperties]::SHObjectProperties([IntPtr]::Zero,2,[string]$payload.path,$null);'true';break
+  Add-Type -AssemblyName System.Windows.Forms
+  Add-Type -Path (Join-Path $PSScriptRoot 'property-sheet.cs') -ReferencedAssemblies System.Windows.Forms
+  if(![PropertySheetLifetime]::Show([string]$payload.path)){throw 'Windows could not open the Properties window.'}
+  'true';break
  }
  'openWith' {
   Add-Type -TypeDefinition 'using System;using System.Runtime.InteropServices;public class ShellOpenWith{[StructLayout(LayoutKind.Sequential,CharSet=CharSet.Unicode)]public struct Info{[MarshalAs(UnmanagedType.LPWStr)]public string file;[MarshalAs(UnmanagedType.LPWStr)]public string type;public uint flags;}[DllImport("shell32.dll",CharSet=CharSet.Unicode)]public static extern int SHOpenWithDialog(IntPtr hwnd,ref Info info);}'

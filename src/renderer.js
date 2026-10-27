@@ -49,7 +49,7 @@ $('#clear-search').onclick=()=>{$('#search').value='';$('#search').dispatchEvent
 $('#search').addEventListener('keydown',e=>{if(e.key==='Escape'){$('#search').value='';$('#search').dispatchEvent(new Event('input'));}});
 $('#address').addEventListener('keydown',e=>{if(e.key==='Escape'){$('#address').value=tab().path;$('#address').blur();}});
 document.querySelectorAll('[data-sort]').forEach(b=>b.onclick=()=>{$('#sort').value=b.dataset.sort;document.querySelectorAll('[data-sort]').forEach(el=>el.setAttribute('aria-checked',String(el===b)));render();});
-const imageExtensions=new Set(['png','jpg','jpeg','webp','gif','bmp','tif','tiff','heic','avif','ico']);
+const imageExtensions=ImageFormats.extensions;
 const imageCache=new Map();let thumbnailQueue=[],thumbnailWorkers=0;
 const thumbObserver=new IntersectionObserver(changes=>{for(const item of changes){if(item.isIntersecting){thumbObserver.unobserve(item.target);thumbnailQueue.push(item.target);}}drainThumbnails();},{root:$('#file-area'),rootMargin:'120px'});
 function loadThumbnails(){thumbObserver.disconnect();thumbnailQueue=[];const items=visible();for(const row of document.querySelectorAll('.entry')){const e=items[Number(row.dataset.index)];if(!e||e.directory)continue;row.dataset.imagePath=e.path;row.dataset.imageKey=e.path+':'+e.modified;const data=imageCache.get(row.dataset.imageKey);if(data)paintThumbnail(row,data);else thumbObserver.observe(row);}}

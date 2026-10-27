@@ -1,0 +1,1 @@
+HEIC decoder regression fixture: unmodified examples/example.heic from strukturag/libheif commit 12a259a5882dd99d45ec5fc77e296a3b620d1e2e. The upstream examples/COPYING is retained here. Included only for the packaged image-decoder regression checks.

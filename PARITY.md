@@ -1,4 +1,4 @@
-# Explorer capability audit — 0.8.2
+# Explorer capability audit — 0.8.3
 
 This is a working file manager, not a complete reimplementation of Windows Explorer. “Native” below means the command opens a Windows interface; it does not run inside this app.
 
@@ -98,3 +98,9 @@ Version 0.8.1 is published as the stable release. Tagged Windows CI [40470942943
 ## 0.8.2 drive capacity display
 
 This PC uses drive-aware cards/rows with a used-space bar, free and total capacity, plus used bytes and percentage. Drives at 90% usage show a red bar; unavailable capacity is explicitly labelled. Both grid and details display capacity, configured Windows labels are preserved, and refreshed capacity participates in row-cache identity. The Windows smoke suite checks bars and labels in both views; the captured This PC view was inspected for layout.
+
+## 0.8.3 image viewer and Properties
+
+The viewer handles wheel zoom, pan, fit/100% double-click and captured Left/Right arrows across folder images even when the file list is filtered. Closing/reopening cannot clear a newly opened image. Properties commands always show an in-app details dialog, including drive capacity, with an optional native Windows sheet. Native property helpers retain their STA message loop and reveal their own property sheets instead of exiting immediately.
+
+Image decoding runs in two bounded, timed worker threads using sharp, a bundled HEIC/HEIF decoder and an ImageMagick WASM fallback. Real HEIC and generated JPEG/TIFF/SVG/AVIF/TGA pixels are tested, alongside corrupt-file errors. The packaged regression suite tests HEIC, wheel zoom, native arrow input and the Properties dialog. The extension set includes additional formats supported by bundled engines or Windows; every camera RAW, proprietary variant, animation/multipage frame, HDR profile and corrupt file is not guaranteed. Input limits are 256 MB and 128 million pixels; preview output is bounded. Full image-format and Explorer parity remain open.
