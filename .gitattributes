@@ -1,0 +1,4 @@
+
+# Preserve the pinned upstream engine and license bytes on every checkout.
+vendor/7zip/** -text
+test/fixtures/*.rar -text

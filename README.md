@@ -6,7 +6,7 @@ Windows desktop file manager with Explorer-style tabs, address/search and comman
 
 The published stable release is [0.7.0](https://github.com/iniharith/nothing-explorer/releases/tag/v0.7.0). It adds merge/replace and verified transfer recovery, metadata preservation, configurable columns, rename patterns and Explorer drop modifiers. The unfinished embedded Windows pane is disabled in normal builds; failures retain the working glass list. See [PARITY.md](PARITY.md) for completed checks and remaining acceptance. The previous packaged 0.6.2 app detected 0.7.0 through the fixed GitHub feed. Full Explorer parity remains in progress.
 
-The current development candidate is **0.8.0-beta.1**, with tab/window workflows under acceptance. It is not a published update. See the unreleased sections in PARITY.md.
+The current development candidate is **0.8.0-beta.1**, with tab/window and archive workflows under acceptance. It is not a published update. See the unreleased sections in PARITY.md.
 
 ## Run and build
 
@@ -84,3 +84,7 @@ To release: change the package/lock version together, commit, create the matchin
 - Group by type/name/month/size, configurable detail columns, compact rows, file-extension visibility and four icon sizes, retaining a bounded virtual viewport.
 
 `npm run icon` regenerates the PNG from the editable SVG. The ICO includes 16–256 px entries. See PARITY.md for the remaining implementation and acceptance gaps.
+
+## Third-party archive engine
+
+The development candidate bundles a pinned 7-Zip engine and its corresponding source/license files. See [THIRD_PARTY.md](THIRD_PARTY.md) for provenance, licensing and installed source locations. No archive engine is downloaded independently at runtime.

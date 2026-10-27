@@ -12,6 +12,12 @@ if($Operation -eq 'broker'){
 $payloadJson=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($PayloadBase64))
 $payload=$payloadJson | ConvertFrom-Json
 switch($Operation){
+ 'commitArchive' {
+  $source=[IO.Path]::GetFullPath([string]$payload.source);$target=[IO.Path]::GetFullPath([string]$payload.target)
+  if([IO.Path]::GetFileName($source) -notmatch '^\.nothing-zip-[0-9a-f-]{36}$' -or -not [string]::Equals([IO.Path]::GetDirectoryName($source),[IO.Path]::GetDirectoryName($target),[StringComparison]::OrdinalIgnoreCase)){throw 'Invalid archive commit paths.'}
+  function ArchiveLongPath([string]$value){if($value.StartsWith('\\?\')){return $value};if($value.StartsWith('\\')){return '\\?\UNC\'+$value.Substring(2)};return '\\?\'+$value}
+  [IO.File]::Move((ArchiveLongPath $source),(ArchiveLongPath $target));$true|ConvertTo-Json -Compress;break
+ }
  'copyMetadata' {
   if(-not ('NothingExplorer.FileMetadata' -as [type])){Add-Type -Path (Join-Path $PSScriptRoot 'file-metadata.cs')}
   @{streams=[NothingExplorer.FileMetadata]::Apply([string]$payload.source,[string]$payload.target,[bool]$payload.shallow)}|ConvertTo-Json -Compress;break

@@ -21,19 +21,26 @@
     "files": [
       "src/**/*",
       "package.json",
-      "assets/**/*"
+      "assets/**/*",
+      "vendor/**/*",
+      "THIRD_PARTY.md"
     ],
     "directories": {
       "output": "release"
     },
     "win": {
-      "icon": "assets/icon.ico"
+      "icon": "assets/icon.ico",
+      "signExts": [
+        "!7z.exe",
+        "!7z.dll"
+      ]
     },
     "asarUnpack": [
       "src/windows.ps1",
       "src/shell-host.ps1",
       "src/shell-host.cs",
-      "src/file-metadata.cs"
+      "src/file-metadata.cs",
+      "vendor/7zip/**/*"
     ],
     "nsis": {
       "oneClick": false,
@@ -51,7 +58,7 @@
         "releaseType": "release"
       }
     ],
-    "copyright": "Copyright © 2026 INIHARITH"
+    "copyright": "Copyright \u00a9 2026 INIHARITH"
   },
   "dependencies": {
     "electron-updater": "^6.8.9",

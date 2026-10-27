@@ -1,0 +1,1 @@
+(function(root){const matches=p=>typeof p==='string'&&/\.(?:zip|7z|rar|tar|gz|bz2|xz|zst|tgz|tbz2?|txz|tzst|cab)$/i.test(p);const stem=p=>p.replace(/(?:\.tar)?\.(?:zip|7z|rar|tar|gz|bz2|xz|zst|tgz|tbz2?|txz|tzst|cab)$/i,'');const api={matches,stem};if(typeof module==='object'&&module.exports)module.exports=api;else root.ArchiveFormats=api;})(globalThis);
