@@ -3,3 +3,6 @@ const toolsMenu=document.createElement('details');toolsMenu.className='command-m
 for(const [command,label] of systemTools){const button=document.createElement('button');button.textContent=label;button.onclick=async()=>{toolsMenu.open=false;try{const paths=[...selected];if(paths.length>1&&!['terminal','map-drive','folder-options'].includes(command))throw Error('Select one item.');await call('systemCommand',command,paths[0]||tab().path);}catch(e){notify(e.message);}};toolsMenu.lastElementChild.append(button);}
 for(const [name,label] of [['computer','This PC'],['libraries','Libraries'],['recent','Recent items'],['control','Control Panel'],['printers','Printers']]){const button=document.createElement('button');button.textContent=label;button.onclick=()=>{toolsMenu.open=false;call('shellFolder',name).catch(e=>notify(e.message));};toolsMenu.lastElementChild.append(button);}
 $('.toolbar-spacer').before(toolsMenu);
+
+addCommand('new-window','New window (Ctrl+N)');
+addCommand('move-tab-window','Move tab to new window');

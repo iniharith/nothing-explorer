@@ -30,7 +30,7 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Path artifacts -Force | Out-Null
-          $app = Start-Process -FilePath '.\release\win-unpacked\Nothing Explorer.exe' -ArgumentList '--smoke','--capture','--interaction-test' -WindowStyle Hidden -Wait -PassThru -RedirectStandardOutput artifacts/ci-smoke.log -RedirectStandardError artifacts/ci-smoke-error.log
+          $app = Start-Process -FilePath '.\release\win-unpacked\Nothing Explorer.exe' -ArgumentList '--smoke','--capture','--interaction-test','--window-test' -WindowStyle Hidden -Wait -PassThru -RedirectStandardOutput artifacts/ci-smoke.log -RedirectStandardError artifacts/ci-smoke-error.log
           Get-Content artifacts/ci-smoke.log
           Get-Content artifacts/ci-smoke-error.log
           if ($app.ExitCode -ne 0) { throw "Smoke exited $($app.ExitCode)" }
