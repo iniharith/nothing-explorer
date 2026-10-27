@@ -4,7 +4,7 @@ Windows desktop file manager with Explorer-style tabs, address/search and comman
 
 ## Release status
 
-The published stable release is [0.8.0](https://github.com/iniharith/nothing-explorer/releases/tag/v0.8.0). It adds merge/replace and verified transfer recovery, metadata preservation, configurable columns, rename patterns and Explorer drop modifiers. The unfinished embedded Windows pane is disabled in normal builds; failures retain the working glass list. See [PARITY.md](PARITY.md) for completed checks and remaining acceptance. The installed application was upgraded from 0.5.0 to 0.8.0, with the existing profile preserved. Full Explorer parity remains in progress.
+The published stable release is [0.8.1](https://github.com/iniharith/nothing-explorer/releases/tag/v0.8.1). It adds merge/replace and verified transfer recovery, metadata preservation, configurable columns, rename patterns and Explorer drop modifiers. The unfinished embedded Windows pane is disabled in normal builds; failures retain the working glass list. See [PARITY.md](PARITY.md) for completed checks and remaining acceptance. The installed application was upgraded to 0.8.1, with the existing profile backed up and preserved. Full Explorer parity remains in progress.
 
 Version 0.8.0 includes tab/window workflows and multi-format archive extraction with shared cancellation. See PARITY.md for the implementation and remaining acceptance gates.
 
@@ -88,3 +88,9 @@ To release: change the package/lock version together, commit, create the matchin
 ## Third-party archive engine
 
 The app bundles a pinned 7-Zip engine and its corresponding source/license files. See [THIRD_PARTY.md](THIRD_PARTY.md) for provenance, licensing and installed source locations. No archive engine is downloaded independently at runtime.
+
+## Explorer workflow controls
+
+Middle-click a folder or sidebar location to open it in a new tab. Right-click Quick Access locations for pin/unpin, new tab/window and properties; the main-view menu also includes folder pinning. Settings > Appearance chooses Home, This PC or previous tabs for startup. New tabs open Home or This PC rather than copying the active folder.
+
+The status bar includes selected-file bytes and Details/Large-icons buttons. Ctrl+Shift+6 and Ctrl+Shift+2 switch those views; Alt+D and Ctrl+L focus the address, Ctrl+E and Ctrl+F focus search. Still images open in the built-in viewer, with previous/next, fit, zoom and Open with. Format support depends on the decoder and installed Windows codecs.
