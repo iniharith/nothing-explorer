@@ -4,9 +4,9 @@ Windows desktop file manager with Explorer-style tabs, address/search and comman
 
 ## Release status
 
-The published stable release is [0.7.0](https://github.com/iniharith/nothing-explorer/releases/tag/v0.7.0). It adds merge/replace and verified transfer recovery, metadata preservation, configurable columns, rename patterns and Explorer drop modifiers. The unfinished embedded Windows pane is disabled in normal builds; failures retain the working glass list. See [PARITY.md](PARITY.md) for completed checks and remaining acceptance. The previous packaged 0.6.2 app detected 0.7.0 through the fixed GitHub feed. Full Explorer parity remains in progress.
+The published stable release is [0.8.0](https://github.com/iniharith/nothing-explorer/releases/tag/v0.8.0). It adds merge/replace and verified transfer recovery, metadata preservation, configurable columns, rename patterns and Explorer drop modifiers. The unfinished embedded Windows pane is disabled in normal builds; failures retain the working glass list. See [PARITY.md](PARITY.md) for completed checks and remaining acceptance. The installed application was upgraded from 0.5.0 to 0.8.0, with the existing profile preserved. Full Explorer parity remains in progress.
 
-The current development candidate is **0.8.0-beta.1**, with tab/window and archive workflows under acceptance. It is not a published update. See the unreleased sections in PARITY.md.
+Version 0.8.0 includes tab/window workflows and multi-format archive extraction with shared cancellation. See PARITY.md for the implementation and remaining acceptance gates.
 
 ## Run and build
 
@@ -19,7 +19,7 @@ npm run installer
 ```
 
 Portable folder: `release/win-unpacked/` (keep the entire folder together).
-Installer: `release/Nothing-Explorer-Setup-0.7.0.exe`.
+Installer: `release/Nothing-Explorer-Setup-0.8.0.exe`.
 
 ## Implemented
 
@@ -87,4 +87,4 @@ To release: change the package/lock version together, commit, create the matchin
 
 ## Third-party archive engine
 
-The development candidate bundles a pinned 7-Zip engine and its corresponding source/license files. See [THIRD_PARTY.md](THIRD_PARTY.md) for provenance, licensing and installed source locations. No archive engine is downloaded independently at runtime.
+The app bundles a pinned 7-Zip engine and its corresponding source/license files. See [THIRD_PARTY.md](THIRD_PARTY.md) for provenance, licensing and installed source locations. No archive engine is downloaded independently at runtime.
