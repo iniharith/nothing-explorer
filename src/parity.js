@@ -12,7 +12,7 @@ const parityAction=action;action=async function(cmd){try{
   if(!selected.size)throw Error('Select Recycle Bin items.');for(const p of selected)await call('shellInvoke',p,cmd==='restore-recycled'?'restore':'delete');await refresh();return;
  }
  if(['network','recycle'].includes(cmd))return navigate('shell:'+cmd);
- if(tab()?.path.startsWith('shell:')&&['mkdir','new-text','paste','cut','copy','rename','trash','compress','extract','search-subfolders','indexed-search','properties','reveal','open-with','pin'].includes(cmd)){
+ if(tab()?.path.startsWith('shell:')&&(!selected.size||[...selected].some(p=>p.startsWith('shell:')))&&['mkdir','new-text','paste','cut','copy','rename','trash','compress','extract','search-subfolders','indexed-search','properties','reveal','open-with','pin'].includes(cmd)){
   if(cmd==='trash')return action('delete-recycled');
   if(['properties','open-with','reveal','rename','copy','cut'].includes(cmd)){if(selected.size>1)throw Error('Select one shell item for Windows actions.');return call('shellActions',[...selected][0]||tab().path);}
   throw Error('Use Windows actions for operations in this shell location.');

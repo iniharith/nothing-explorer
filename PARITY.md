@@ -1,4 +1,4 @@
-# Explorer capability audit — 0.8.0
+# Explorer capability audit — 0.8.1
 
 This is a working file manager, not a complete reimplementation of Windows Explorer. “Native” below means the command opens a Windows interface; it does not run inside this app.
 
@@ -86,3 +86,9 @@ Archive parity is still incomplete: hierarchical entry navigation/opening/editin
 ## 0.8.0 publication and installed upgrade
 
 The stable release passed tagged Windows CI [40467465114](https://github.com/iniharith/nothing-explorer/actions/runs/40467465114): 54 tests, installer generation and packaged smoke/interaction/multi-window checks. The downloaded installer matched latest.yml SHA512 and the GitHub asset SHA256. The existing installation was upgraded from 0.5.0 to 0.8.0; the executable, app package and all six vendor/source/license files were verified, and all 79 existing profile files were preserved before first launch. A recoverable local backup was retained. This release milestone does not complete the full Explorer-parity goal.
+
+## 0.8.1 Explorer workflow fixes
+
+Adds middle-button folder/location opening, Home/This PC/previous-tabs startup selection, This PC new tabs, sidebar location menus and main-view pin action, footer Details/Large-icons buttons and selected-file byte totals. Image decoding uses direct raster pixels before Windows thumbnails, requests 512px thumbnail surfaces, avoids enlarging 48px Windows type icons, and removes the timeout that cached a generic icon. A built-in still-image viewer provides previous/next, fit/zoom and Windows Open with; uncommon formats still depend on available Windows codecs. Native key aliases, Alt+D/Ctrl+E and view shortcuts are covered; refresh completion is bound to its original tab.
+
+Local native-input regression checks include real middle-button clicks, keyboard navigation, view shortcuts, side-button command/fallback routing, startup selection, Quick Access menu and image viewer decoding. Hardware-specific mouse drivers, codecs and all Explorer shortcuts remain acceptance limits. This is not full Explorer parity.
