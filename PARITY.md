@@ -50,3 +50,8 @@ The stable 0.7.0 release passed tagged Windows CI [40452523216](https://github.c
 - Electron patched to 44.9.3 and the compatible fast-uri dependency updated; npm audit reports no known vulnerabilities for the current lockfile.
 
 The full Explorer-parity objective remains active. This release does not close the remaining search, archive, namespace, accessibility, window-management and native integration requirements listed above.
+## Unreleased tab workflow improvements
+
+The codex/tab-workflows branch adds per-tab query/selection/scroll restoration, background close without reloading the active folder, middle-click tab closing, in-window drag reordering, keyboard navigation when a tab title is focused, and a scrollable strip that retains a visible active tab and new-tab button with many tabs open. The final packaged desktop regression passed these behaviors plus existing file operations and keyboard/mouse checks. Drag reordering is exercised through browser drag events; physical drag acceptance and tab tear-off/multiple windows remain open.
+
+The measured 50,000-item run retained 26 mounted rows, 60.006 app updates/second and 0.6 ms p95 row patch cost, with GPU compositing enabled. This development work is not part of the published 0.7.0 installer.

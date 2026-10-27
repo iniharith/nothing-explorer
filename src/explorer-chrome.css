@@ -40,3 +40,7 @@ main{border:0;border-radius:0;box-shadow:none;background:rgba(12,12,12,.58)}
 .light .explorer-commands{background:rgba(245,248,245,.76)}
 .light .tab.active{background:rgba(255,255,255,.6)}
 @media(max-width:1120px){.tabs{padding-left:8px}.sidebar{width:190px}.navigation{gap:8px}.nav-buttons{width:164px}.search{width:210px}.explorer-commands{padding-inline:10px}}
+
+.tab.drop-before{box-shadow:inset 3px 0 var(--accent);}
+
+.tab-strip{display:flex;flex:1;min-width:0;gap:4px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-app-region:no-drag}.tab-strip .tab{flex:0 1 240px}.tabs>[data-action="new-tab"]{flex-shrink:0}
