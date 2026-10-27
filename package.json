@@ -1,6 +1,6 @@
 {
   "name": "nothing-explorer",
-  "version": "0.8.0-beta.1",
+  "version": "0.8.0",
   "description": "A frosted glass file manager for Windows",
   "main": "src/main.cjs",
   "scripts": {
@@ -58,7 +58,7 @@
         "releaseType": "release"
       }
     ],
-    "copyright": "Copyright \u00a9 2026 INIHARITH"
+    "copyright": "Copyright © 2026 INIHARITH"
   },
   "dependencies": {
     "electron-updater": "^6.8.9",
