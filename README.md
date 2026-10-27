@@ -1,10 +1,10 @@
-# Nothing Explorer 0.6
+# Nothing Explorer 0.7
 
 Windows desktop file manager with Explorer-style tabs, address/search and command rows, and the supplied admin reference's frosted-glass treatment.
 
-## Development status
+## Release status
 
-The published stable baseline is 0.6.2. The 0.7 development branch adds merge/replace and verified transfer recovery, metadata preservation, configurable columns, rename patterns and Explorer drop modifiers. The unfinished embedded Windows pane is disabled in normal builds; failures retain the working glass list. See [PARITY.md](PARITY.md) for completed checks and remaining acceptance. No 0.7 stable release is published yet.
+The published stable release is [0.7.0](https://github.com/iniharith/nothing-explorer/releases/tag/v0.7.0). It adds merge/replace and verified transfer recovery, metadata preservation, configurable columns, rename patterns and Explorer drop modifiers. The unfinished embedded Windows pane is disabled in normal builds; failures retain the working glass list. See [PARITY.md](PARITY.md) for completed checks and remaining acceptance. The previous packaged 0.6.2 app detected 0.7.0 through the fixed GitHub feed. Full Explorer parity remains in progress.
 
 ## Run and build
 
@@ -17,15 +17,15 @@ npm run installer
 ```
 
 Portable folder: `release/win-unpacked/` (keep the entire folder together).
-Installer: `release/Nothing-Explorer-Setup-0.6.2.exe`.
+Installer: `release/Nothing-Explorer-Setup-0.7.0.exe`.
 
 ## Implemented
 
 - Windows volume names, free space, mapped drive paths and removable-drive availability. Refresh updates drive information. This PC's labelled disk is verified as **STRIX (F:)**; unlabeled disks retain Windows-style fallback names.
 - Tabs and histories, breadcrumbs/address editing, known folders, pins, saved sessions, list/grid views, sort direction, multiselection, and select/invert commands.
 - Double-click/native association opening, image previews, lazy thumbnails and Windows file icons. Installed Windows handlers determine optional PDF/design/video thumbnails.
-- Create folder/text file, rename, copy/cut/paste with Windows file clipboard exchange, native drag-out and copy-on-drop into the current folder, folder rows, or sidebar locations.
-- Sequential transfer queue, byte progress, cancel, same/cross-volume copies and moves. Every transfer uses staging; interrupted items retain their source. Completed items remain if a later item fails. Existing destinations are rejected rather than silently renamed/overwritten.
+- Create folder/text file, rename, copy/cut/paste with Windows file clipboard exchange, native drag-out and copy/move/shortcut drop modifiers into the current folder, folder rows, or sidebar locations.
+- Sequential transfer queue, byte progress, cancel, same/cross-volume copies and moves. Every transfer uses staging; interrupted items retain their source. Completed items remain if a later item fails. Existing destinations require an explicit skip/keep-both/merge/replace choice. Replaced items are retained for Undo.
 - Persistent undo for successful app transfers, creations and renames (latest 100 records). Hashes protect copied targets from being discarded if their contents changed. Undo refuses collisions. A move copies/verifies the destination then sends its source to the Windows Recycle Bin, so a failed recycle can leave a safe duplicate.
 - ZIP entry browsing, creation, and extraction into a new folder. Extraction rejects path traversal, reserved Windows names, symlinks, duplicate case-insensitive paths and encrypted entries, and verifies CRC checksums.
 - Current-folder filtering, cancellable subfolder scanning, optional Windows indexed name search. Scanning supports quoted names, wildcards, `ext:png`, `kind:picture`, `size:>10MB`, `modified:2026-10-23`, `created:>=2026-01-01`, and `content:"some text"`. Content scanning reads text files up to 2 MB; scan/index results are capped at 5,000. The optional indexed mode covers indexed locations and names, not all filesystem contents or the complete AQS grammar.
@@ -44,7 +44,7 @@ Ctrl+T new tab; Ctrl+W close tab; Ctrl+Tab / Ctrl+Shift+Tab cycle tabs; Ctrl+L a
 
 The Windows Search provider was queried live, native dialog exports were checked, and the Windows clipboard reader was checked. Cross-app clipboard/drag-and-drop, interactive native dialog acceptance, assistive technology, cloud placeholders, network permissions and very large directory workloads still require hands-on acceptance. Builds are unsigned. Installed builds detect stable releases from iniharith/nothing-explorer on GitHub. Settings offers download and restart/install controls; no alternate update URL is accepted.
 
-This app does not implement Explorer's entire shell namespace/third-party shell-extension host inside its own window. Windows-only shell operations use native Windows entry points or Show in Windows Explorer. ZIP is the built-in archive format; use Open With for others. Interrupted transfer jobs can retry their remaining sources after a restart. Partial files restart from zero; a commit/journal gap can still require manual reconciliation. Originals are retained until commit and recycle. The app does not register itself as the Windows shell.
+This app does not implement Explorer's entire shell namespace/third-party shell-extension host inside its own window. Windows-only shell operations use native Windows entry points or Show in Windows Explorer. ZIP is the built-in archive format; use Open With for others. Interrupted transfer jobs can retry their remaining sources after a restart. Partial file data resumes from a verified prefix; verified transfer commits are reconciled on retry. Full undo/redo power-failure recovery remains incomplete. Originals are retained until commit and recycle. The app does not register itself as the Windows shell.
 
 ## Design
 

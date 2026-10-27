@@ -1,4 +1,4 @@
-# Explorer capability audit — 0.7 development
+# Explorer capability audit — 0.7.0
 
 This is a working file manager, not a complete reimplementation of Windows Explorer. “Native” below means the command opens a Windows interface; it does not run inside this app.
 
@@ -34,9 +34,9 @@ Transfer jobs persist their source list and committed source list. After a resta
 
 Native recycle/restore was tested using a disposable uniquely named fixture. Enumeration of the existing Recycle Bin was read-only. Windows confirms permanent deletion through its own shell verb. Device/provider transfers and shell-extension submenu hosting are not claimed complete.
 
-## Unreleased 0.7 development work (2026-10-27)
+## Published 0.7.0 milestone (2026-10-27)
 
-The latest published stable release remains 0.6.2. The following work is not yet a published update:
+The stable 0.7.0 release passed tagged Windows CI [40452523216](https://github.com/iniharith/nothing-explorer/actions/runs/40452523216). The packaged 0.6.2 updater detected 0.7.0 through the fixed GitHub feed. This proves release detection, not installation acceptance on every machine. The release includes:
 
 - Merge/replace transfer planning with retained replacement data and grouped undo/redo.
 - Prefix-verified resumption of interrupted file data; journalled verified-commit reconciliation; durable journal writes.
@@ -49,4 +49,4 @@ The latest published stable release remains 0.6.2. The following work is not yet
 - Fixed the native-view placeholder regression: the glass list stays visible, a native pane requires a visible-window acknowledgement, failures restore normal controls, and test windows have an explicit TEST WINDOW title. No published release contains this placeholder.
 - Electron patched to 44.9.3 and the compatible fast-uri dependency updated; npm audit reports no known vulnerabilities for the current lockfile.
 
-The full Explorer-parity objective remains active. This development checkpoint does not close the remaining search, archive, namespace, accessibility, window-management and native integration requirements listed above.
+The full Explorer-parity objective remains active. This release does not close the remaining search, archive, namespace, accessibility, window-management and native integration requirements listed above.

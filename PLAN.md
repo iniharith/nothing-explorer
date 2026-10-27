@@ -1,41 +1,25 @@
-# Nothing Explorer capability audit — 0.6.2
+# Nothing Explorer completion plan
 
-## Delivered
+The objective remains full Explorer-style functionality, navigation and interaction without awkward workarounds, preserving the frosted-glass theme, original icon and INIHARITH credit. PARITY.md records the current implementation and acceptance limits. A release milestone does not complete this objective.
 
-- Explorer-style compact chrome and frosted-glass design; both themes and wallpaper.
-- Native disk names (STRIX F: verified), capacities, removable media state, known folders, drive paths/UNC navigation.
-- Tabs/history/breadcrumbs; pinned folders and saved session; sorting, grid/details and selection commands.
-- Real file/folder double-click; native file associations; image thumbnails/previews and Windows icons.
-- Windows clipboard bridge and drag-and-drop; new folders/text, rename, recycle, native Properties/Open With.
-- File transfer queue, byte progress, cancellation, collision rejection, cross-volume support, persistent protected undo.
-- ZIP browse/compress/extract with path checks and checksum verification.
-- Filters, cancellable recursive search, optional Windows indexed name search.
-- Native Windows Network and Recycle Bin entry points; Show in Windows Explorer for other shell operations.
-- Portable folder and NSIS installer.
+## Published milestone
 
-## Verified
+The published 0.7.0 release adds merge/replace with recovery copies, prefix-verified interrupted-file resume, verified-commit reconciliation, Windows stream/permission/timestamp preservation, configurable columns, rename patterns and Explorer drop modifiers. Same-folder moves do nothing, copies receive vacant numbered names, and shortcut groups persist through Undo/Redo. The native-pane prototype is disabled in normal builds and cannot hide the glass file list on startup failure.
 
-Twenty automated tests pass. Desktop smoke tests check actual click pairs, decoded preview/thumbnail dimensions, live Windows drive labels in three UI surfaces, file operations, undo, pins/session state and archive flows. Windows indexed search returned results on this PC. Native dialog exports and clipboard reader were checked. Final packaged smoke is required for every release.
+Thirty-three automated tests and local packaged desktop checks pass. Branch Windows CI 40452297772 passed. Tagged Windows CI 40452523216 also passed, published the stable release, and the packaged 0.6.2 app detected 0.7.0 through the fixed GitHub feed. Installation across additional machines remains unverified.
 
-## Boundaries and acceptance still outstanding
+## Remaining completion gates
 
-- Full in-window Windows shell namespace and third-party context-menu extension hosting; shell-only tools use native Windows entry points.
-- Complete AQS grammar, indexed content queries, non-ZIP archive formats, and encrypted ZIPs.
-- Byte-offset resume and complete crash reconciliation remain outstanding. Interrupted jobs can explicitly retry remaining sources, skipping recorded commits. Source data is retained until a completed move is recycled.
-- Hands-on cross-app drag/drop and clipboard, Properties/Open With UI, network mapping/permissions, device hotplug, cloud placeholders, assistive technology and extreme directory sizes.
-- Authenticode signing remains unconfigured. GitHub release updates are implemented; installed upgrade acceptance across machines remains.
+- File operations: exercise copy/move/merge/replace/cancel/resume across real volumes, UNC permissions, links and cloud/device providers; retain streams and supported filesystem metadata. Complete recoverable undo/redo transactions through process termination at each filesystem/journal boundary. Preserve edits and collision protection during recovery.
+- Clipboard and drop: physical cross-application file and virtual-file transfers in both directions, modifiers/cursor feedback, mixed-volume operations, right-button choices, cancelled drops and cut-clipboard reconciliation. Retain data on partial failure.
+- Navigation and windows: reorder/close/reopen/tear off tabs, multiple windows, per-tab selection/search/scroll/history, familiar keyboard and mouse behavior with the address/search fields and dialogs focused.
+- Windows shell: visibly accepted embedded navigation and native context-menu/preview handlers, full extension/submenu hosting, namespace commands and virtual files. Validate keyboard focus, item selection, accessibility and device/provider behavior before enabling the prototype.
+- Contents and preview: native preview handlers, folder view conventions, metadata columns/properties and large mixed-media folders; verify memory bounds and thumbnails on installed handlers.
+- Search: complete AQS/property/indexed-content behavior and Explorer-compatible scopes, plus cancellable fallback scanning.
+- Archives: broader Windows-supported formats, encrypted archives where supported, and familiar archive navigation/editing, with traversal/link/collision protection and cancellation.
+- Appearance and performance: retain the existing design while verifying keyboard focus, assistive technology, reduced motion, high contrast, DPI/multiple monitors and actual desktop presentation. The app update target remains 60 Hz; do not equate scheduler cadence with universal GPU frame rate.
+- Distribution: validate each tagged packaged build, fixed GitHub stable feed detection/download and upgrade behavior. Authenticode signing and acceptance on additional machines remain open.
 
-This audit distinguishes implementation and tests from native desktop acceptance. It is not a claim of full Windows Explorer parity.
+## Required evidence before declaring completion
 
-## 0.4 input and performance
-
-Native keyboard/mouse routing, virtualized file rows, a shared 60 Hz app update clock, cached wallpaper blur, and restrained control/menu transitions are implemented. Additional desktop input/performance checks use a 50,000-entry fixture. See PERFORMANCE.md for the distinction between app cadence and desktop presentation.
-
-
-## 0.5 expansion
-
-Appearance settings, creator credit, a fixed GitHub release feed, release CI, native shell tools, previewed bulk rename with grouped undo and transfer pause/resume are implemented. See PARITY.md for the complete capability matrix and remaining scope.
-
-## 0.6 parity milestone
-
-Original themed folder icon; persistent protected redo; interrupted-job retry; collision skip/keep-both; in-window shell namespace enumeration and recycle restoration; grouping, icon sizes, columns and compact rows. Test the previous packaged 0.5 build against the published 0.6 GitHub feed. Full parity remains the target, with PARITY.md distinguishing implemented capabilities from native bridges and unverified provider behavior.
+Every requirement needs matching implementation and meaningful tests, plus real native/UI/provider acceptance where simulation cannot establish behavior. A passing fixture or API enumeration alone does not prove an entire Windows integration. Keep remaining and unverified items visible in PARITY.md; do not mark the persistent goal complete until all completion gates are satisfied.
