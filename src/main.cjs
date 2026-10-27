@@ -37,7 +37,7 @@ app.whenReady().then(async()=>{
  const preferencePath=path.join(app.getPath('userData'),'preferences.json');
  const {normalize,defaults}=require('./preferences.cjs');
  handle('settings',async(command,value)=>{if(command==='load'){try{return normalize(JSON.parse(await fs.readFile(preferencePath,'utf8')));}catch{return {...defaults};}}if(!['save','reset'].includes(command))throw Error('Unsupported settings command.');const result=command==='reset'?{...defaults}:normalize(value);await fs.mkdir(path.dirname(preferencePath),{recursive:true});await fs.writeFile(preferencePath+'.tmp',JSON.stringify(result));await fs.rename(preferencePath+'.tmp',preferencePath);return result;});
- const updates=require('./updates.cjs').createUpdates({app,win,busy:()=>Boolean(transfers.running),smoke:process.argv.includes('--smoke')});
+ const updates=require('./updates.cjs').createUpdates({app,win,busy:()=>Boolean(transfers.running||transfers.creating),smoke:process.argv.includes('--smoke')});
  handle('update',command=>updates.run(command));
  handle('creator',()=>shell.openExternal('https://iniharith.github.io/'));
  handle('systemCommand',async(command,p)=>{const allowed=['terminal','print','share','shortcut','map-drive','disconnect-drive','eject','folder-options','permissions','previous-versions'];if(!allowed.includes(command))throw Error('Unsupported system command.');if(p){if(typeof p!=='string'||!path.isAbsolute(p))throw Error('Choose a local item.');await fs.access(p);}if(['map-drive','folder-options'].includes(command))return windows.run('systemCommand',{command},0);if(!p)throw Error('Choose an item.');return windows.run('systemCommand',{command,path:p},0);});
