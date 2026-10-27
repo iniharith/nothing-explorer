@@ -18,7 +18,7 @@ class TransferQueue{
  constructor({onChange=()=>{},trash=async p=>fs.rm(p,{recursive:true}),journalPath=null,metadata=null}={}){this.metadata=metadata;this.jobs=[];this.history=[];this.redoStack=[];this.running=false;this.onChange=onChange;this.trash=trash;this.journalPath=journalPath;this.recoveryRoot=journalPath?path.join(path.dirname(journalPath),'recovery'):path.join(require('node:os').tmpdir(),'ne-recovery-'+crypto.randomUUID());}
  publicJobs(){return this.jobs.map(({controller,finalStatus,...job})=>({...job}));}
  emit(){this.onChange(this.publicJobs());}
- enqueue(sources,destination,move=false,names={},policy='error'){const controller=new AbortController();const job={id:crypto.randomUUID(),sources:[...sources],destination,move,names,policy,operationIds:[],status:'queued',bytes:0,total:0,current:'',completed:[],completedSources:[],error:'',controller};this.jobs.push(job);this.emit();this.drain();return job.id;}
+ enqueue(sources,destination,move=false,names={},policy='error'){if(this.creating)throw Error('Wait for file operations to finish.');const controller=new AbortController();const job={id:crypto.randomUUID(),sources:[...sources],destination,move,names,policy,operationIds:[],status:'queued',bytes:0,total:0,current:'',completed:[],completedSources:[],error:'',controller};this.jobs.push(job);this.emit();this.drain();return job.id;}
  cancel(id){const j=this.jobs.find(j=>j.id===id);if(j&&['queued','running'].includes(j.status)){j.controller.abort();if(j.status==='queued')j.status='cancelled';this.save().catch(()=>{});this.emit();}}
  pause(id,paused){const job=this.jobs.find(j=>j.id===id);if(!job||!['running','queued'].includes(job.status))throw Error('Transfer is no longer active.');job.paused=Boolean(paused);this.save().catch(()=>{});this.emit();}
  async drain(){if(this.running)return;this.running=true;try{for(const job of this.jobs){if(job.status!=='queued')continue;job.status='running';this.emit();try{await this.save();await this.execute(job);job.finalStatus='completed';await this.save();delete job.finalStatus;job.status='completed';}catch(e){delete job.finalStatus;job.status=job.controller.signal.aborted?'cancelled':'failed';job.error=e.message;try{await this.save();}catch(error){job.error+=' History could not be saved: '+error.message;}}this.emit();}}finally{this.running=false;}}
@@ -64,12 +64,13 @@ class TransferQueue{
  async invalidateRedo(){const release=async record=>{if(record.type==='group'){for(const child of record.ops)await release(child);}else if(record.stash)await this.trash(record.stash);};for(const record of this.redoStack)await release(record);this.redoStack=[];}
  async recordRename(source,target){await this.invalidateRedo();this.history.push({type:'rename',source,target,after:await snapshot(target,true),verified:true});await this.save();}
  async recordBatchRename(items){await this.invalidateRedo();const records=[];for(const item of items)records.push({...item,after:await snapshot(item.target,true)});this.history.push({type:'batch-rename',items:records});await this.save();}
- async recordCreate(target){await this.invalidateRedo();this.history.push({type:'create',target,after:await snapshot(target,true),verified:true});await this.save();}
+ async recordCreate(target,groupId){await this.invalidateRedo();const record={type:'create',target,after:await snapshot(target,true),verified:true};if(groupId){let group=this.history.find(op=>op.type==='group'&&op.id===groupId);if(!group){group={type:'group',id:groupId,ops:[]};this.history.push(group);}group.ops.push(record);}else this.history.push(record);await this.save();}
+ async createGroup(task){if(this.running||this.creating)throw Error('Wait for file operations to finish.');this.creating=true;const id=crypto.randomUUID();try{return await task(target=>this.recordCreate(target,id));}finally{this.creating=false;}}
  async relocate(source,target){
   await vacant(target);await fs.mkdir(path.dirname(target),{recursive:true});try{await fs.rename(source,target);return;}catch(e){if(e.code!=='EXDEV')throw e;}
   const stage=path.join(path.dirname(target),'.nothing-transfer-'+crypto.randomUUID());try{const before=await snapshot(source,true);await copyTree(source,stage,new AbortController().signal,()=>{});if(this.metadata)await this.metadata(source,stage);if(!same(before,await snapshot(source,true)))throw Error('Item changed while saving recovery data.');if(!sameContent(before,await snapshot(stage,true)))throw Error('Recovery copy verification failed.');await fs.rename(stage,target);try{await this.trash(source);}catch(e){await this.trash(target);throw e;}}finally{await fs.rm(stage,{recursive:true,force:true}).catch(()=>{});}
  }
- async undo(){if(this.running)throw Error('Wait for active transfers to finish before undoing.');const op=this.history.at(-1);if(!op)throw Error('Nothing to undo.');await this.undoOp(op);this.history.pop();this.redoStack.push(op);await this.save();return op;}
+ async undo(){if(this.running||this.creating)throw Error('Wait for active transfers to finish before undoing.');const op=this.history.at(-1);if(!op)throw Error('Nothing to undo.');await this.undoOp(op);this.history.pop();this.redoStack.push(op);await this.save();return op;}
  async undoOp(op){
   if(op.type==='group'){for(const child of [...op.ops].reverse()){if(child.undone)continue;await this.undoOp(child);child.undone=true;await this.save();}return;}
   if(op.type==='removed-directory'){await vacant(op.source);await fs.mkdir(op.source,{mode:op.mode});if(op.metadataStash&&this.metadata)await this.metadata(op.metadataStash,op.source,{shallow:true});await fs.utimes(op.source,op.atime/1000,op.mtime/1000);return;}
@@ -87,7 +88,7 @@ class TransferQueue{
   }
   return op;
  }
- async redo(){if(this.running)throw Error('Wait for active transfers to finish before redoing.');const op=this.redoStack.at(-1);if(!op)throw Error('Nothing to redo.');await this.redoOp(op);this.redoStack.pop();this.history.push(op);await this.save();return op;}
+ async redo(){if(this.running||this.creating)throw Error('Wait for active transfers to finish before redoing.');const op=this.redoStack.at(-1);if(!op)throw Error('Nothing to redo.');await this.redoOp(op);this.redoStack.pop();this.history.push(op);await this.save();return op;}
  async redoOp(op){
   if(op.type==='group'){for(const child of op.ops){if(!child.undone)continue;await this.redoOp(child);child.undone=false;await this.save();}return;}
   if(op.type==='removed-directory'){const st=await fs.lstat(op.source);if(!st.isDirectory()||st.isSymbolicLink()||(await fs.readdir(op.source)).length)throw Error('Restored directory changed. Redo stopped.');await fs.rmdir(op.source);return;}
