@@ -1,10 +1,12 @@
-# Nothing Explorer 0.7
+# Nothing Explorer
 
 Windows desktop file manager with Explorer-style tabs, address/search and command rows, and the supplied admin reference's frosted-glass treatment.
 
 ## Release status
 
 The published stable release is [0.7.0](https://github.com/iniharith/nothing-explorer/releases/tag/v0.7.0). It adds merge/replace and verified transfer recovery, metadata preservation, configurable columns, rename patterns and Explorer drop modifiers. The unfinished embedded Windows pane is disabled in normal builds; failures retain the working glass list. See [PARITY.md](PARITY.md) for completed checks and remaining acceptance. The previous packaged 0.6.2 app detected 0.7.0 through the fixed GitHub feed. Full Explorer parity remains in progress.
+
+The current development candidate is **0.8.0-beta.1**, with tab/window workflows under acceptance. It is not a published update. See the unreleased sections in PARITY.md.
 
 ## Run and build
 

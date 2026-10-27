@@ -43,4 +43,4 @@ main{border:0;border-radius:0;box-shadow:none;background:rgba(12,12,12,.58)}
 
 .tab.drop-before{box-shadow:inset 3px 0 var(--accent);}
 
-.tab-strip{display:flex;flex:1;min-width:0;gap:4px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-app-region:no-drag}.tab-strip .tab{flex:0 1 240px}.tabs>[data-action="new-tab"]{flex-shrink:0}
+.tab-strip{display:flex;flex:0 1 auto;max-width:calc(100% - 40px);min-width:0;gap:4px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-app-region:no-drag}.tab-strip .tab{flex:0 1 240px}.tabs>[data-action="new-tab"]{flex-shrink:0}
