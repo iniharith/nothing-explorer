@@ -1,4 +1,4 @@
-# Explorer capability audit — 0.8.1
+# Explorer capability audit — 0.8.2
 
 This is a working file manager, not a complete reimplementation of Windows Explorer. “Native” below means the command opens a Windows interface; it does not run inside this app.
 
@@ -94,3 +94,7 @@ Adds middle-button folder/location opening, Home/This PC/previous-tabs startup s
 Local native-input regression checks include real middle-button clicks, keyboard navigation, view shortcuts, side-button command/fallback routing, startup selection, Quick Access menu and image viewer decoding. Hardware-specific mouse drivers, codecs and all Explorer shortcuts remain acceptance limits. This is not full Explorer parity.
 
 Version 0.8.1 is published as the stable release. Tagged Windows CI [40470942943](https://github.com/iniharith/nothing-explorer/actions/runs/40470942943) passed all tests, packaging and native-input/multi-window suites. The installed executable and app package report 0.8.1; the installed suite passed independently, all 78 existing profile files matched the backup before first launch, and native Windows Ctrl+T input opened a new tab after normal startup. The installed copy was built locally from the tagged source; the hosted installer is independently built by CI.
+
+## 0.8.2 drive capacity display
+
+This PC uses drive-aware cards/rows with a used-space bar, free and total capacity, plus used bytes and percentage. Drives at 90% usage show a red bar; unavailable capacity is explicitly labelled. Both grid and details display capacity, configured Windows labels are preserved, and refreshed capacity participates in row-cache identity. The Windows smoke suite checks bars and labels in both views; the captured This PC view was inspected for layout.
