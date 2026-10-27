@@ -13,13 +13,14 @@ function consume(e){e.preventDefault();e.stopImmediatePropagation();}
 function focusItem(index,{shift=false,control=false}={}){const items=visible();if(!items.length)return;index=Math.max(0,Math.min(items.length-1,index));if(shift){if(!control)selected.clear();for(let i=Math.min(anchor,index);i<=Math.max(anchor,index);i++)selected.add(items[i].path);}else if(!control){selected=new Set([items[index].path]);anchor=index;}focusIndex=index;$('#files').focus({preventScroll:true});fileViewport.ensure(index);syncSelection();for(const row of document.querySelectorAll('.entry'))row.classList.toggle('keyboard-focus',Number(row.dataset.index)===index);$('#files').setAttribute('aria-activedescendant','file-row-'+index);const row=document.querySelector(`[data-index="${index}"]`);if(row)row.id='file-row-'+index;}
 let typeAhead='',typeAheadAt=0;
 document.addEventListener('keydown',e=>{
- if(e.isComposing||document.querySelector('dialog[open]'))return;const key=e.key.toLowerCase(),ctrl=e.ctrlKey||e.metaKey,isEditing=editable(e.target);let cmd;
+ if(e.isComposing||document.querySelector('dialog[open]')||e.target.closest?.('.column-resize'))return;const key=e.key.toLowerCase(),ctrl=e.ctrlKey||e.metaKey,isEditing=editable(e.target);let cmd;
  if(e.altKey)cmd={arrowleft:'back',arrowright:'forward',arrowup:'up',enter:'native-properties'}[key];
  else if(ctrl){cmd={l:'focus-address',f:'focus-search',t:'new-tab',w:'close-tab',tab:e.shiftKey?'previous-tab':'next-tab',r:'refresh'}[key];if(e.shiftKey&&key==='n')cmd='mkdir';}
  else cmd={f5:'refresh',f6:'focus-address',browserback:'back',browserforward:'forward'}[key];
  if(cmd){consume(e);action(cmd);return;}
  if(key==='escape'){consume(e);document.querySelectorAll('.command-menu[open]').forEach(m=>m.open=false);if(e.target===$('#search'))$('#clear-search').click();else if(e.target===$('#address')){$('#address').value=tab().path;$('#address').blur();$('#address-form').classList.remove('editing');}else{selected.clear();syncSelection();}return;}
  if(isEditing)return;
+ if(e.target.closest?.('button,summary,a')&&!ctrl&&!e.altKey&&['enter',' '].includes(key))return;
  if(ctrl){cmd={c:e.shiftKey?'copy-path':'copy',x:'cut',v:'paste',z:e.shiftKey?'redo':'undo',y:'redo'}[key];if(key==='a'){consume(e);selected=new Set(visible().map(e=>e.path));syncSelection();return;}}
  else cmd={f2:'rename',delete:'trash',enter:'open',backspace:'back'}[key];
  if(cmd){consume(e);action(cmd);return;}

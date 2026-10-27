@@ -12,6 +12,10 @@ if($Operation -eq 'broker'){
 $payloadJson=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($PayloadBase64))
 $payload=$payloadJson | ConvertFrom-Json
 switch($Operation){
+ 'copyMetadata' {
+  if(-not ('NothingExplorer.FileMetadata' -as [type])){Add-Type -Path (Join-Path $PSScriptRoot 'file-metadata.cs')}
+  @{streams=[NothingExplorer.FileMetadata]::Apply([string]$payload.source,[string]$payload.target,[bool]$payload.shallow)}|ConvertTo-Json -Compress;break
+ }
  'shellList' {
   $shell=New-Object -ComObject Shell.Application;$folder=$shell.Namespace([string]$payload.path)
   if(-not $folder){throw 'Windows could not open this shell location.'}
@@ -102,6 +106,15 @@ switch($Operation){
    if($effect -is [IO.MemoryStream]){$bytes=$effect.ToArray();if($bytes.Length -ge 4){$move=([BitConverter]::ToInt32($bytes,0) -band 2) -ne 0}}
   }
   @{paths=$paths;move=$move}|ConvertTo-Json -Compress;break
+ }
+ 'clipboardCommitMove' {
+  Add-Type -AssemblyName System.Windows.Forms
+  $current=@([Windows.Forms.Clipboard]::GetFileDropList());$expected=@($payload.paths);$object=[Windows.Forms.Clipboard]::GetDataObject();$effect=$object.GetData('Preferred DropEffect');$isMove=$effect -is [IO.MemoryStream] -and $effect.Length -ge 4 -and (([BitConverter]::ToInt32($effect.ToArray(),0) -band 2) -ne 0)
+  if($isMove -and $current.Count -eq $expected.Count -and (@(Compare-Object $current $expected).Count -eq 0)){
+   $remaining=@($expected | Where-Object {Test-Path -LiteralPath ([string]$_)})
+   if(-not $remaining.Count){[Windows.Forms.Clipboard]::Clear()}else{$data=[Windows.Forms.DataObject]::new();$paths=[Collections.Specialized.StringCollection]::new();foreach($filePath in $remaining){[void]$paths.Add([string]$filePath)};$data.SetFileDropList($paths);$data.SetData('Preferred DropEffect',[IO.MemoryStream]::new([BitConverter]::GetBytes([int]2)));[Windows.Forms.Clipboard]::SetDataObject($data,$true)}
+  }
+  'true';break
  }
  'clipboardClear' {
   Add-Type -AssemblyName System.Windows.Forms

@@ -31,3 +31,17 @@ Undo/redo recovery copies are stored in the app profile, not hidden among the us
 Transfer jobs persist their source list and committed source list. After a restart, interrupted jobs wait for **Retry remaining**. Committed sources are skipped, and known partial staging data is removed only when the user retries with sources still present. Interrupted files restart from byte zero. If a crash occurs between filesystem commit and journal save, an existing destination stops retry rather than overwriting it; manual reconciliation is still necessary.
 
 Native recycle/restore was tested using a disposable uniquely named fixture. Enumeration of the existing Recycle Bin was read-only. Windows confirms permanent deletion through its own shell verb. Device/provider transfers and shell-extension submenu hosting are not claimed complete.
+
+## Unreleased 0.7 development work (2026-10-27)
+
+The latest published stable release remains 0.6.2. The following work is not yet a published update:
+
+- Merge/replace transfer planning with retained replacement data and grouped undo/redo.
+- Prefix-verified resumption of interrupted file data; journalled verified-commit reconciliation; durable journal writes.
+- Windows named streams, discretionary ACLs and timestamps copied through the Windows metadata helper. Broader filesystem/provider acceptance remains necessary.
+- Column resizing/reordering and rename patterns with numbering, dates, sizes and literal find/replace.
+- An embedded ExplorerBrowser prototype, behind explicit development/test flags. Its folder, parent-window, selection and navigation checks pass. Complete visual, shell-extension, clipboard and device acceptance is still outstanding. It is hidden from normal builds until that acceptance is complete.
+- Fixed the native-view placeholder regression: the glass list stays visible, a native pane requires a visible-window acknowledgement, failures restore normal controls, and test windows have an explicit TEST WINDOW title. No published release contains this placeholder.
+- Electron patched to 44.9.3 and the compatible fast-uri dependency updated; npm audit reports no known vulnerabilities for the current lockfile.
+
+The full Explorer-parity objective remains active. This development checkpoint does not close the remaining search, archive, namespace, accessibility, window-management and native integration requirements listed above.

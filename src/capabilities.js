@@ -17,7 +17,7 @@ action=async function(cmd){try{
  case 'indexed-search':indexedSearch=!indexedSearch;recursiveSearch=true;document.querySelector('[data-action="indexed-search"]').classList.toggle('active',indexedSearch);$('#search').placeholder=indexedSearch?'Search Windows index':'Search folder and subfolders';if($('#search').value.trim())performRecursiveSearch();else notify(indexedSearch?'Search uses the Windows index; only indexed locations are included.':'Search uses folder scanning.');return;
  case 'refresh':await refreshDrives();return capabilityAction(cmd);
  case 'copy':case 'cut':clipboardCheck++;if(paths.length)await call('clipboardFiles','write',paths,cmd==='cut');return capabilityAction(cmd);
- case 'paste':{const external=await call('clipboardFiles','read');clipboard=external?.paths?.length?external:null;updateButtons();if(!clipboard){notify('No files on the clipboard.');return;}return capabilityAction(cmd);}
+ case 'paste':{const external=await call('clipboardFiles','read');clipboard=external?.paths?.length?external:null;updateButtons();if(!clipboard){notify('No files on the clipboard.');return;}await capabilityAction(cmd);const currentClipboard=await call('clipboardFiles','read');clipboard=currentClipboard?.paths?.length?currentClipboard:null;updateButtons();return;}
  case 'undo':await call('undo');await refresh();notify('Last file operation undone.');return;
  case 'pin':{const entry=entries.find(e=>e.path===p),target=entry?.directory?p:folder;const list=pinned(),i=list.indexOf(target);if(i<0)list.push(target);else list.splice(i,1);localStorage.setItem('pins-v1',JSON.stringify(list));drawPinned();return;}
  case 'native-properties':await call('nativeProperties',p||folder);return;

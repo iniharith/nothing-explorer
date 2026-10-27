@@ -2,7 +2,7 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 const queryTools=require('./query.js');
 function nameCheck(name) {
- if(typeof name !== 'string' || !name.trim() || /[<>:"/\\|?*\x00-\x1f]/.test(name) || /[. ]$/.test(name) || /^(con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\.|$)/i.test(name) || name==='.' || name==='..') throw Error('Enter a valid Windows file name.');
+ if(typeof name !== 'string' || name.length>255 || !name.trim() || /[<>:"/\\|?*\x00-\x1f]/.test(name) || /[. ]$/.test(name) || /^(con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\.|$)/i.test(name) || name==='.' || name==='..') throw Error('Enter a valid Windows file name.');
  return name;
 }
 async function vacant(target) { try {await fs.lstat(target);} catch(e) {if(e.code==='ENOENT')return;throw e;} throw Error('An item with this name already exists. Rename it or cancel.'); }

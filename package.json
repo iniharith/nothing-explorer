@@ -1,6 +1,6 @@
 {
   "name": "nothing-explorer",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "description": "A frosted glass file manager for Windows",
   "main": "src/main.cjs",
   "scripts": {
@@ -12,7 +12,7 @@
     "icon": "electron scripts/render-icon.cjs"
   },
   "devDependencies": {
-    "electron": "44.8.0",
+    "electron": "44.9.3",
     "electron-builder": "26.15.3"
   },
   "build": {
@@ -30,7 +30,10 @@
       "icon": "assets/icon.ico"
     },
     "asarUnpack": [
-      "src/windows.ps1"
+      "src/windows.ps1",
+      "src/shell-host.ps1",
+      "src/shell-host.cs",
+      "src/file-metadata.cs"
     ],
     "nsis": {
       "oneClick": false,
@@ -48,7 +51,7 @@
         "releaseType": "release"
       }
     ],
-    "copyright": "Copyright \u00a9 2026 INIHARITH"
+    "copyright": "Copyright © 2026 INIHARITH"
   },
   "dependencies": {
     "electron-updater": "^6.8.9",
