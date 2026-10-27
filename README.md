@@ -2,6 +2,10 @@
 
 Windows desktop file manager with Explorer-style tabs, address/search and command rows, and the supplied admin reference's frosted-glass treatment.
 
+## Development status
+
+The published stable baseline is 0.6.2. The 0.7 development branch adds merge/replace and verified transfer recovery, metadata preservation, configurable columns, rename patterns and Explorer drop modifiers. The unfinished embedded Windows pane is disabled in normal builds; failures retain the working glass list. See [PARITY.md](PARITY.md) for completed checks and remaining acceptance. No 0.7 stable release is published yet.
+
 ## Run and build
 
 ```
