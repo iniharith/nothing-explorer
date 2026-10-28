@@ -17,7 +17,7 @@ settingsDialog.innerHTML=`<header class="settings-header"><div><span class="eyeb
 </div></div>`;document.body.append(settingsDialog);
 function applyPreferences(){
  const p=preferences,b=document.body;b.dataset.motion=p.motion;b.dataset.smooth=String(p.smooth);b.dataset.glass=String(p.glass);b.dataset.blur=String(p.blur);b.dataset.wallpaper=String(p.wallpaper);
- b.style.setProperty('--panel-opacity',p.opacity/100);b.classList.toggle('light',p.theme==='light');localStorage.setItem('theme',p.theme);$('#theme-label').textContent=p.theme==='light'?'Light':'Dark';call('theme',p.theme).catch(()=>{});glassKey='';cacheWallpaperLayer();
+ b.style.setProperty('--panel-opacity',p.opacity/100);b.style.setProperty('--titlebar-blur',p.blur+'px');b.classList.toggle('light',p.theme==='light');localStorage.setItem('theme',p.theme);$('#theme-label').textContent=p.theme==='light'?'Light':'Dark';call('theme',p.theme).catch(()=>{});glassKey='';cacheWallpaperLayer();
  for(const key of Object.keys(p)){const input=$('#setting-'+key);if(!input)continue;if(input.type==='checkbox')input.checked=p[key];else input.value=p[key];}
  $('#blur-value').textContent=p.blur+' px';$('#opacity-value').textContent=p.opacity+'%';$('#setting-blur').disabled=!p.glass;
 }

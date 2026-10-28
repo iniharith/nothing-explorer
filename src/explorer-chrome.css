@@ -1,6 +1,6 @@
 /* Windows Explorer hierarchy: tab/title row, navigation, command bar. */
 body,body.light{padding:0;display:flex;flex-direction:column}
-.tabs{height:40px;min-height:40px;padding:5px 150px 0 8px;align-items:stretch;border:0;background:rgba(17,17,17,.8);-webkit-app-region:drag;overflow:hidden;gap:4px}
+.tabs{height:40px;min-height:40px;padding:5px 150px 0 8px;align-items:stretch;border:0;background:rgba(17,17,17,var(--panel-opacity,.8));backdrop-filter:blur(var(--titlebar-blur,16px)) saturate(1.2);-webkit-app-region:drag;overflow:hidden;gap:4px}
 .tabs button,.tab{-webkit-app-region:no-drag}
 .tab{width:240px;max-width:240px;min-width:90px;height:35px;border-radius:8px 8px 0 0;padding:0 8px;background:transparent;flex-shrink:1}
 .tab.active{background:rgba(255,255,255,.075);border:0}
@@ -44,3 +44,6 @@ main{border:0;border-radius:0;box-shadow:none;background:rgba(12,12,12,.58)}
 .tab.drop-before{box-shadow:inset 3px 0 var(--accent);}
 
 .tab-strip{display:flex;flex:0 1 auto;max-width:calc(100% - 40px);min-width:0;gap:4px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-app-region:no-drag}.tab-strip .tab{flex:0 1 240px}.tabs>[data-action="new-tab"]{flex-shrink:0}
+
+body.light .tabs{background:rgba(242,245,242,var(--panel-opacity,.8))}
+body[data-glass=false] .tabs{backdrop-filter:none}

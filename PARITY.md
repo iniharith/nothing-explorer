@@ -1,4 +1,4 @@
-# Explorer capability audit — 0.8.5
+# Explorer capability audit — 0.8.6
 
 This is a working file manager, not a complete reimplementation of Windows Explorer. “Native” below means the command opens a Windows interface; it does not run inside this app.
 
@@ -118,3 +118,9 @@ Version 0.8.4 is published as stable. Tagged Windows CI [40607087689](https://gi
 ## 0.8.5 centered grid filenames
 
 Grid filename labels are centered beneath artwork, including wrapped names. The packaged smoke check verifies both centering and wrapping. Tagged Windows CI [40607521997](https://github.com/iniharith/nothing-explorer/actions/runs/40607521997) passed and published the release. A separate check using the installed 0.8.4 executable detected 0.8.5 from GitHub. The installed app was left running so the user can restart when ready.
+
+## 0.8.6 tab sorting, location icons and title bar
+
+Each tab keeps its own sort field and direction; saved sessions retain these choices independently, and tab moves between windows preserve and validate the sort state. A tab matching a Quick Access location uses the same location icon, including Downloads. Native Windows caption buttons remain in use with a transparent overlay over the glass title bar; blur and opacity follow Appearance settings, and turning off glass disables title-bar blur. A background native-window screenshot was inspected locally.
+
+Session restoration of previous tabs remains controlled by Settings > Appearance > Open Nothing Explorer to > Previous tabs. A new tab initially inherits the most recently chosen sort as a default; later changes affect only that tab.
