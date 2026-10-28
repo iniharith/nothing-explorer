@@ -12,6 +12,10 @@ if($Operation -eq 'broker'){
 $payloadJson=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String($PayloadBase64))
 $payload=$payloadJson | ConvertFrom-Json
 switch($Operation){
+ 'shellImage' {
+  if(-not ('ShellImage' -as [type])){Add-Type -Path (Join-Path $PSScriptRoot 'shell-image.cs') -ReferencedAssemblies System.Drawing}
+  [ShellImage]::Read([string]$payload.path,[int]$payload.width,[bool]$payload.iconOnly)|ConvertTo-Json -Compress;break
+ }
  'commitArchive' {
   $source=[IO.Path]::GetFullPath([string]$payload.source);$target=[IO.Path]::GetFullPath([string]$payload.target)
   if([IO.Path]::GetFileName($source) -notmatch '^\.nothing-zip-[0-9a-f-]{36}$' -or -not [string]::Equals([IO.Path]::GetDirectoryName($source),[IO.Path]::GetDirectoryName($target),[StringComparison]::OrdinalIgnoreCase)){throw 'Invalid archive commit paths.'}

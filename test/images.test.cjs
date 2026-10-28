@@ -3,7 +3,7 @@ const sharp=require('sharp'),{decode}=require('../src/images.cjs');
 test('bundled image engines decode real HEIC pixels without Windows codecs',async()=>{
  const data=await decode(path.join(__dirname,'../assets/fixtures/images/example.heic'),256);
  const metadata=await sharp(Buffer.from(data.split(',')[1],'base64')).metadata();
- assert.equal(metadata.width,256);assert.equal(metadata.height,171);assert.equal(metadata.format,'png');
+ assert.equal(metadata.width,256);assert.equal(metadata.height,171);assert.equal(metadata.format,'jpeg');
 });
 test('image workers decode JPEG, TIFF, SVG, AVIF and TGA within thumbnail bounds',async()=>{
  const root=await fs.mkdtemp(path.join(os.tmpdir(),'ne-image-decode-'));

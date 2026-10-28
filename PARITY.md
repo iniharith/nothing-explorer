@@ -1,4 +1,4 @@
-# Explorer capability audit — 0.8.3
+# Explorer capability audit — 0.8.4
 
 This is a working file manager, not a complete reimplementation of Windows Explorer. “Native” below means the command opens a Windows interface; it does not run inside this app.
 
@@ -106,3 +106,9 @@ The viewer handles wheel zoom, pan, fit/100% double-click and captured Left/Righ
 Image decoding runs in two bounded, timed worker threads using sharp, a bundled HEIC/HEIF decoder and an ImageMagick WASM fallback. Real HEIC and generated JPEG/TIFF/SVG/AVIF/TGA pixels are tested, alongside corrupt-file errors. The packaged regression suite tests HEIC, wheel zoom, native arrow input and the Properties dialog. The extension set includes additional formats supported by bundled engines or Windows; every camera RAW, proprietary variant, animation/multipage frame, HDR profile and corrupt file is not guaranteed. Input limits are 256 MB and 128 million pixels; preview output is bounded. Full image-format and Explorer parity remain open.
 
 Version 0.8.3 is published as stable. Tagged Windows CI [40473655680](https://github.com/iniharith/nothing-explorer/actions/runs/40473655680) passed all 57 tests, packaging and packaged input/multi-window checks. The installed executable and app package were verified as 0.8.3; all 78 existing profile files matched the backup before first launch, and the full installed smoke/interaction/multi-window suite passed independently. The local installation was built from the tagged source; the hosted installer is independently built by CI. The native helper accepted and returned from its Properties call; visible acceptance of the optional Windows sheet remains separate from the tested in-app Properties dialog.
+
+## 0.8.4 artwork and sort persistence
+
+Grid artwork uses Explorer-sized layouts and wrapped filenames, and requests 256px Windows shell icons through IShellItemImageFactory rather than enlarging 48px icons. Shell extraction uses its own broker so icon requests do not stall the file-operation helper. Thumbnails are cached in bounded memory and local disk storage; two reusable decoder workers and request coalescing reduce repeated work. A fitted viewer preview appears first, with a higher-resolution image requested on zoom and the next image prefetched. Image bytes are read before decoding so Windows rename and Undo can proceed without the decoder keeping the source file open. Sort field and direction are saved for later launches and updated by both the menu and detail headers.
+
+A local 65-megapixel JPEG in the user's example folder decoded to the fitted 1024px preview in about 0.7 seconds after the file-lock fix, compared with about 4.5 seconds for the earlier 4096px initial decode on this PC. Full-resolution refinement still takes time, and cold storage or complex codecs vary. The user's files and generated preview cache are local only and are not included in the repository or release.
