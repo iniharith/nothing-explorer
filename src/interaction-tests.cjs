@@ -8,7 +8,10 @@ module.exports=async function(win){
  const root=await fs.mkdtemp(path.join(os.tmpdir(),'ne-regression-input-'));
  try{
   await fs.mkdir(path.join(root,'Child'));await fs.writeFile(path.join(root,'Note.txt'),'shortcut check');
-  await js(`navigate(${JSON.stringify(root)})`);await js(`navigate(${JSON.stringify(path.join(root,'Child'))})`);
+  await js(`navigate(${JSON.stringify(root)})`);
+  const originalStartDrag=win.webContents.startDrag;let dragged;
+  try{win.webContents.startDrag=options=>{dragged=options;};await js(`(async()=>{const item=entries.find(e=>e.name==='Note.txt'),index=visible().indexOf(item),row=document.querySelector('[data-index="'+index+'"]'),image=document.createElement('img');image.className='file-thumbnail';image.src=await call('thumbnail',item.path);row.querySelector('.file-art').replaceChildren(image);selected=new Set([item.path]);row.dispatchEvent(new DragEvent('dragstart',{bubbles:true,cancelable:true,dataTransfer:new DataTransfer()}));})()`);for(let i=0;i<100&&!dragged;i++)await pause(20);assert(dragged&&dragged.files[0]===path.join(root,'Note.txt'),'File drag did not reach the native bridge');const dimensions=dragged.icon.getSize();assert(dimensions.width<=32&&dimensions.height<=32&&dimensions.width>0,'File drag preview is not icon sized');const chosen=await js(`document.querySelector('[data-index="'+visible().findIndex(e=>e.name==='Note.txt')+'"] .file-thumbnail').src`);const expected=require('./drag-image.cjs').dragImage(require('electron').nativeImage,chosen,path.join(__dirname,'../assets/icon.png'));assert(dragged.icon.toDataURL()===expected.toDataURL(),'File drag did not use the selected file icon');checks.push('native file drag uses a small file-specific preview');}finally{win.webContents.startDrag=originalStartDrag;}
+  await js(`navigate(${JSON.stringify(path.join(root,'Child'))})`);
   key('L',['control']);await until(`$('#address-form').classList.contains('editing')`,'Native Ctrl+L failed');
   key('Left',['alt']);await until(`tab().path===${JSON.stringify(root)}`,'Alt+Left failed while address focused');checks.push('native keyboard navigation while editing');
   win.emit('app-command',{preventDefault(){}},'browser-forward');await until(`tab().path===${JSON.stringify(path.join(root,'Child'))}`,'Native mouse forward failed');

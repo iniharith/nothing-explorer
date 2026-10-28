@@ -1,4 +1,4 @@
-# Explorer capability audit — 0.8.6
+# Explorer capability audit — 0.8.7
 
 This is a working file manager, not a complete reimplementation of Windows Explorer. “Native” below means the command opens a Windows interface; it does not run inside this app.
 
@@ -124,3 +124,7 @@ Grid filename labels are centered beneath artwork, including wrapped names. The 
 Each tab keeps its own sort field and direction; saved sessions retain these choices independently, and tab moves between windows preserve and validate the sort state. A tab matching a Quick Access location uses the same location icon, including Downloads. Native Windows caption buttons remain in use with a transparent overlay over the glass title bar; blur and opacity follow Appearance settings, and turning off glass disables title-bar blur. A background native-window screenshot was inspected locally.
 
 Session restoration of previous tabs remains controlled by Settings > Appearance > Open Nothing Explorer to > Previous tabs. A new tab initially inherits the most recently chosen sort as a default; later changes affect only that tab.
+
+## 0.8.7 file drag preview
+
+Dragging files out of the app now passes a file-specific thumbnail or icon to Windows at a maximum of 32 pixels, with a small app-icon fallback if a preview is unavailable. Tests cover the renderer-to-main drag request, selected paths, pixel bounds and fallback. A physical drop into every external application has not been verified.

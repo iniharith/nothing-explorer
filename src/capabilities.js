@@ -45,7 +45,7 @@ document.addEventListener('click',e=>{const button=e.target.closest('[data-cance
 let clipboardCheck=0;
 window.addEventListener('focus',async()=>{const id=++clipboardCheck;try{const data=await call('clipboardFiles','read');if(id===clipboardCheck){clipboard=data?.paths?.length?data:null;updateButtons();}}catch{}});
 call('clipboardFiles','read').then(data=>{if(data?.paths?.length){clipboard=data;updateButtons();}}).catch(()=>{});
-$('#files').addEventListener('dragstart',e=>{const row=e.target.closest('[data-index]'),entry=row&&visible()[Number(row.dataset.index)];if(!entry)return;e.preventDefault();api.startDrag(selected.has(entry.path)?[...selected]:[entry.path]);});
+$('#files').addEventListener('dragstart',e=>{const row=e.target.closest('[data-index]'),entry=row&&visible()[Number(row.dataset.index)];if(!entry)return;e.preventDefault();const preview=row.querySelector('.file-thumbnail')?.src;api.startDrag(selected.has(entry.path)?[...selected]:[entry.path],preview);});
 function dropDestination(target){const row=target.closest('[data-index]'),entry=row&&visible()[Number(row.dataset.index)],location=target.closest('[data-location]')?.dataset.location;if(location)return location;if(!target.closest('#file-area'))return null;return entry?.directory?entry.path:tab()?.path;}
 function dropKeys(e){return {altKey:e.altKey,ctrlKey:e.ctrlKey,shiftKey:e.shiftKey};}
 document.addEventListener('dragover',e=>{const destination=dropDestination(e.target);if(!destination||destination.startsWith('shell:'))return;e.preventDefault();let paths=[];try{paths=api.filePaths([...e.dataTransfer.files]);}catch{}e.dataTransfer.dropEffect=DropIntent.effect(dropKeys(e),paths,destination);$('#file-area').classList.add('drop-target');});
