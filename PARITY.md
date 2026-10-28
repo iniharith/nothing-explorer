@@ -128,3 +128,5 @@ Session restoration of previous tabs remains controlled by Settings > Appearance
 ## 0.8.7 file drag preview
 
 Dragging files out of the app now passes a file-specific thumbnail or icon to Windows at a maximum of 32 pixels, with a small app-icon fallback if a preview is unavailable. Tests cover the renderer-to-main drag request, selected paths, pixel bounds and fallback. A physical drop into every external application has not been verified.
+
+Version 0.8.7 is published as stable. Tagged Windows CI [40609444114](https://github.com/iniharith/nothing-explorer/actions/runs/40609444114) passed on its second attempt; the first attempt timed out while waiting for a photo preview. The packaged checks passed locally with both normal and software rendering. The existing installed app was left running. An isolated update check from installed v0.8.5 reported v0.8.7 available, but that diagnostic process subsequently exited with a window-startup/close race; its exit code was 1, so this is not a fully clean diagnostic run. The in-app update UI was not operated during this check.
