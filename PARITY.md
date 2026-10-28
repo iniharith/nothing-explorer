@@ -1,4 +1,4 @@
-# Explorer capability audit — 0.8.4
+# Explorer capability audit — 0.8.5
 
 This is a working file manager, not a complete reimplementation of Windows Explorer. “Native” below means the command opens a Windows interface; it does not run inside this app.
 
@@ -114,3 +114,7 @@ Grid artwork uses Explorer-sized layouts and wrapped filenames, and requests 256
 A local 65-megapixel JPEG in the user's example folder decoded to the fitted 1024px preview in about 0.7 seconds after the file-lock fix, compared with about 4.5 seconds for the earlier 4096px initial decode on this PC. Full-resolution refinement still takes time, and cold storage or complex codecs vary. The user's files and generated preview cache are local only and are not included in the repository or release.
 
 Version 0.8.4 is published as stable. Tagged Windows CI [40607087689](https://github.com/iniharith/nothing-explorer/actions/runs/40607087689) passed all 59 tests, packaging and the packaged input/multi-window checks. The installed executable and package report 0.8.4; all 79 existing profile files matched the backup before first launch, and the full installed smoke/interaction/multi-window suite passed independently. The three folders open before the upgrade were reopened, and the installed grid was visually checked with the user's Illustrator icons. The local installer was built from the tagged source; the hosted installer was independently built by CI.
+
+## 0.8.5 centered grid filenames
+
+Grid filename labels are centered beneath artwork, including wrapped names. The packaged smoke check verifies both centering and wrapping. Tagged Windows CI [40607521997](https://github.com/iniharith/nothing-explorer/actions/runs/40607521997) passed and published the release. A separate check using the installed 0.8.4 executable detected 0.8.5 from GitHub. The installed app was left running so the user can restart when ready.

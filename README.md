@@ -4,7 +4,7 @@ Windows desktop file manager with Explorer-style tabs, address/search and comman
 
 ## Release status
 
-The published stable release is [0.8.4](https://github.com/iniharith/nothing-explorer/releases/tag/v0.8.4). It adds merge/replace and verified transfer recovery, metadata preservation, configurable columns, rename patterns and Explorer drop modifiers. The unfinished embedded Windows pane is disabled in normal builds; failures retain the working glass list. See [PARITY.md](PARITY.md) for completed checks and remaining acceptance. The installed application was upgraded to 0.8.4, with the existing profile backed up and preserved. Full Explorer parity remains in progress.
+The published stable release is [0.8.5](https://github.com/iniharith/nothing-explorer/releases/tag/v0.8.5). It adds merge/replace and verified transfer recovery, metadata preservation, configurable columns, rename patterns and Explorer drop modifiers. The unfinished embedded Windows pane is disabled in normal builds; failures retain the working glass list. See [PARITY.md](PARITY.md) for completed checks and remaining acceptance. The installed application was upgraded to 0.8.4, with the existing profile backed up and preserved. Full Explorer parity remains in progress.
 
 Version 0.8.0 includes tab/window workflows and multi-format archive extraction with shared cancellation. See PARITY.md for the implementation and remaining acceptance gates.
 
@@ -98,3 +98,5 @@ The status bar includes selected-file bytes and Details/Large-icons buttons. Ctr
 Version 0.8.3 adds wheel zoom, image panning, fit/100% double-click and Left/Right navigation across folder images regardless of a filename filter. HEIC/HEIF decode locally with a bundled decoder; sharp and ImageMagick provide additional formats in bounded worker threads. Properties opens an in-app details dialog and offers the Windows sheet. This PC includes used/free/total space and low-space indicators. Proprietary variants, corrupt files and complete animation/multipage/HDR support remain acceptance gaps.
 
 Version 0.8.4 requests larger Windows shell icons, displays larger thumbnails and wraps filenames. A fitted image loads first, with high-resolution detail on zoom; reusable workers and a local thumbnail cache speed repeat visits. The selected sort field and direction persist across launches.
+
+Version 0.8.5 centers wrapped filenames under their icons in grid view.
