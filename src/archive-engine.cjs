@@ -1,4 +1,4 @@
-const fs=require('node:fs/promises'),nativeFs=require('node:fs'),path=require('node:path'),os=require('node:os'),{spawn}=require('node:child_process'),{pipeline}=require('node:stream/promises'),{Transform}=require('node:stream'),{crc32}=require('node:zlib');
+const nativeFs=(()=>{try{return require('original-fs');}catch{return require('node:fs');}})(),fs=nativeFs.promises,path=require('node:path'),os=require('node:os'),{spawn}=require('node:child_process'),{pipeline}=require('node:stream/promises'),{Transform}=require('node:stream'),{crc32}=require('node:zlib');
 const {nameCheck,vacant}=require('./files.cjs');
 const executable=path.join(__dirname.replace('.asar','.asar.unpacked'),'../vendor/7zip/7z.exe');
 function passwordError(){const error=Error('This archive needs the correct password.');error.code='ARCHIVE_PASSWORD';return error;}

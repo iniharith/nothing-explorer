@@ -1,0 +1,2 @@
+const {test}=require('node:test'),assert=require('node:assert/strict'),{UpdateGate}=require('../src/update-gate.cjs');
+test('handoff freezes mutations atomically and unfreezes after failure',()=>{const gate=new UpdateGate(),done=gate.enter();assert.throws(()=>gate.freeze(),/Finish file operations/);done();done();const unfreeze=gate.freeze();assert.throws(()=>gate.enter(),/being transferred/);unfreeze();unfreeze();const later=gate.enter();assert.equal(gate.active,1);later();assert.equal(gate.active,0);});
