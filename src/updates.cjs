@@ -5,6 +5,7 @@ function createUpdates({app,win,busy,smoke=false,updaterFactory=null,createHando
  const send=patch=>{state={...state,...patch};if(!win.isDestroyed())win.webContents.send('update-state',state);return state;};
  if(!app.isPackaged||smoke)return {run:async (command,value)=>{if(command==='status')return state;if(command==='background')return send({backgroundUpdates:value===true});return send({status:'unavailable',message:'Install the released NSIS setup to use GitHub updates.'});}};
  const updater=updaterFactory?updaterFactory(releaseSource):new (require('electron-updater').NsisUpdater)(releaseSource);
+ updater.logger=null; // The handoff parent can close its stderr pipe after activation.
  const handoff=createHandoff?.((phase,message)=>{if(phase==='preparing')send({status:'handoff',message:'Preparing the update in the background…'});else if(phase==='starting')send({status:'handoff',message:'Opening your workspace in the updated app…'});else if(phase==='switching')send({status:'handoff',message:'Switching to the updated app…'});else if(phase==='failed')send({status:'ready',message:'Could not switch versions: '+message});});
  updater.autoDownload=false;updater.autoInstallOnAppQuit=false;updater.allowPrerelease=false;updater.allowDowngrade=false;
  updater.on('checking-for-update',()=>send({status:'checking',message:'Checking GitHub Releases…'}));

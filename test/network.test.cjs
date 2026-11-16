@@ -10,3 +10,4 @@ test('saved Windows network locations expose their server and deduplicate discov
  const result=await augment({entries:[]},[],async()=>['desktop-dhp4cmk'],[{name:'printer',path:'\\\\Desktop-dhp4cmk\\printer'}]);
  assert.equal(result.entries.length,1);assert.equal(result.entries[0].parsing,'\\\\Desktop-dhp4cmk');assert.equal(result.entries[0].filesystem,false);
 });
+test('Windows network shortcut folders resolve to their saved share',()=>{const {savedLocation}=require('../src/network.cjs');const root='C:\\Users\\user\\Network Shortcuts',records=[{name:'printer (Desktop)',path:'\\\\server\\printer'}];assert.equal(savedLocation(root+'\\printer (Desktop)',root,records),'\\\\server\\printer');assert.equal(savedLocation(root+'\\other',root,records),null);assert.equal(savedLocation(root+'\\printer (Desktop)\\child',root,records),null);});
