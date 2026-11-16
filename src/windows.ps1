@@ -98,6 +98,11 @@ switch($Operation){
    $recordset.Close();@{paths=$paths}|ConvertTo-Json -Compress
   }finally{if($connection.State -ne 0){$connection.Close()}};break
  }
+ 'clipboardText' {
+  Add-Type -AssemblyName System.Windows.Forms
+  [Windows.Forms.Clipboard]::SetText([string]$payload.text)
+  'true';break
+ }
  'clipboardWrite' {
   Add-Type -AssemblyName System.Windows.Forms
   $data=[Windows.Forms.DataObject]::new();$paths=[Collections.Specialized.StringCollection]::new()

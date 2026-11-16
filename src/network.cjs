@@ -1,0 +1,6 @@
+const {execFile}=require('node:child_process');
+const path=require('node:path');
+function serversFromNetView(text){return [...new Set(String(text).split(/\r?\n/).map(line=>line.trim().match(/^\\\\([^\\\s]+)(?:\s|$)/)?.[1]).filter(Boolean).map(name=>name.toLowerCase()))];}
+function netView(){return new Promise(resolve=>execFile(path.join(process.env.SystemRoot||'C:\\Windows','System32','net.exe'),['view'],{windowsHide:true,timeout:6000,encoding:'utf8'},(_error,stdout)=>resolve(serversFromNetView(stdout||''))));}
+async function augment(listing,drives,discover=netView){const entries=[...(listing.entries||[])],seen=new Set(entries.map(e=>String(e.parsing).toLowerCase()));for(const d of drives||[]){if(d.type!==4||!d.path||seen.has(d.path.toLowerCase()))continue;entries.push({name:d.name,parsing:d.path,directory:true,filesystem:true,type:'Network drive',size:0});seen.add(d.path.toLowerCase());}for(const name of await discover()){const parsing='\\\\'+name;if(seen.has(parsing.toLowerCase()))continue;entries.push({name,parsing,directory:true,filesystem:false,type:'Network computer',size:0});seen.add(parsing.toLowerCase());}return {...listing,entries};}
+module.exports={serversFromNetView,augment};

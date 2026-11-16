@@ -6,3 +6,5 @@ $('.toolbar-spacer').before(toolsMenu);
 
 addCommand('new-window','New window (Ctrl+N)');
 addCommand('move-tab-window','Move tab to new window');
+
+const mapNetworkButton=document.createElement('button');mapNetworkButton.textContent='Map network drive';mapNetworkButton.title='Connect a network drive';mapNetworkButton.hidden=true;mapNetworkButton.onclick=async()=>{try{await call('systemCommand','map-drive');window.addEventListener('focus',async()=>{try{const data=await call('locations');paintDrives(data.drives);if(['shell:network','shell:computer'].includes(tab()?.path))await refresh();}catch(e){notify(e.message);}},{once:true});}catch(e){notify(e.message);}};$('.toolbar-spacer').before(mapNetworkButton);
