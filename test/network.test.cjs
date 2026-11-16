@@ -5,3 +5,8 @@ test('network discovery combines computers and mapped drives without duplicates'
  const result=await augment({entries:[{name:'NAS',parsing:'\\\\nas',directory:true,filesystem:false}]},[{name:'Shared (Z:)',path:'Z:\\',type:4},{name:'Disk (C:)',path:'C:\\',type:3}],async()=>['nas','print-pc']);
  assert.equal(result.entries.length,3);assert.equal(result.entries[1].parsing,'Z:\\');assert.equal(result.entries[1].filesystem,true);assert.equal(result.entries[2].parsing,'\\\\print-pc');assert.equal(result.entries[2].filesystem,false);
 });
+
+test('saved Windows network locations expose their server and deduplicate discovery',async()=>{
+ const result=await augment({entries:[]},[],async()=>['desktop-dhp4cmk'],[{name:'printer',path:'\\\\Desktop-dhp4cmk\\printer'}]);
+ assert.equal(result.entries.length,1);assert.equal(result.entries[0].parsing,'\\\\Desktop-dhp4cmk');assert.equal(result.entries[0].filesystem,false);
+});

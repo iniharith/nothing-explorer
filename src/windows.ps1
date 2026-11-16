@@ -41,6 +41,11 @@ switch($Operation){
   $parent='';$parentName='';try{$parent=[string]$folder.ParentFolder.Self.Path;$parentName=[string]$folder.ParentFolder.Self.Name}catch{}
   @{name=[string]$folder.Self.Name;parent=$parent;parentName=$parentName;entries=$items;truncated=($folder.Items().Count -gt 10000)}|ConvertTo-Json -Compress -Depth 8;break
  }
+ 'networkShortcuts' {
+  $root=Join-Path $env:APPDATA 'Microsoft\Windows\Network Shortcuts';$shell=New-Object -ComObject WScript.Shell;$targets=@()
+  if(Test-Path -LiteralPath $root){foreach($entry in @(Get-ChildItem -LiteralPath $root -Force -ErrorAction SilentlyContinue)){try{$shortcut=Join-Path $entry.FullName 'target.lnk';if(Test-Path -LiteralPath $shortcut){$target=[string]$shell.CreateShortcut($shortcut).TargetPath;if($target.StartsWith('\\')){$targets+=@{name=[string]$entry.Name;path=$target}}}}catch{}}}
+  ConvertTo-Json -InputObject $targets -Compress -Depth 4;break
+ }
  'shellInvoke' {
   $shell=New-Object -ComObject Shell.Application;$folder=$shell.Namespace([string]$payload.parent)
   if(-not $folder){$folder=$shell.Namespace([string]$payload.path);if($folder){$item=$folder.Self}}else{$item=$null;foreach($candidate in $folder.Items()){if([string]$candidate.Path -eq [string]$payload.path){$item=$candidate;break}}}
